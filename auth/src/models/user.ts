@@ -15,16 +15,28 @@ export interface UserModel extends mongoose.Model<UserDocument> {
   build(attributes: UserAttributes): UserDocument;
 }
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    toJSON: {
+      transform(doc, returnedObject) {
+        returnedObject.id = returnedObject._id;
+        delete returnedObject._id;
+        delete returnedObject.password;
+        delete returnedObject.__v;
+      },
+    },
+  }
+);
 
 userSchema.pre("save", async function (done) {
   if (this.isModified("password")) {
