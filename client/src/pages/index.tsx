@@ -1,31 +1,26 @@
 import BuildClient from "@/api/build-client";
-import {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPageContext,
-} from "next";
-
-interface CurrentUser {
-  id: string;
-  email: string;
-}
+import { getCurrentUser } from "@/appunused/layout";
+import { CurrentUser } from "@/types/currentUser";
+import { NextPageContext } from "next";
 
 export const getServerSideProps = async (context: NextPageContext) => {
   const client = await BuildClient(context);
   if (!client) throw new Error("Client is undefined");
   const response = await client.get("/api/users/currentuser");
   if (!response) throw new Error("Response is undefined");
-  return { props: { data: response.data } };
+  console.log("data");
+  console.log(response.data);
+  return { props: { currentUser: response.data.currentUser } };
 };
 
-export default function HomePage(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
-  const { currentUser } = props.data;
-  console.log(currentUser);
+export default function HomePage(props: { currentUser: CurrentUser }) {
   return (
     <>
-      {currentUser ? <h1>You are signed in</h1> : <h1>You aren't signed in</h1>}
+      {props.currentUser ? (
+        <h1>You are signed in as {props.currentUser.email}</h1>
+      ) : (
+        <h1>You aren't signed in</h1>
+      )}
     </>
   );
 }
