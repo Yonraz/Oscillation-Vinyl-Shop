@@ -1,6 +1,6 @@
 import { EachMessagePayload, Kafka } from "kafkajs";
 import { TicketCreatedEvent } from "../events/TicketCreatedEvent";
-import { BaseConsumer } from "./AbstractConsumer";
+import { BaseConsumer } from "./BaseConsumer";
 import { Topics } from "./TopicEnum";
 
 export class TicketCreatedConsumer extends BaseConsumer<TicketCreatedEvent> {

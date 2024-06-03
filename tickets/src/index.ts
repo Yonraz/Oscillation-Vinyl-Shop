@@ -19,20 +19,10 @@ const startup = async () => {
   }
   try {
     const kafkaWrapper = new KafkaWrapper();
-    console.log("Connecting to Kafka...");
     await kafkaWrapper.connect(process.env.KAFKA_CLIENT_ID!, [
       process.env.KAFKA_BROKER!,
     ]);
-    const ticketCreatedProducer = new TicketCreatedProducer(
-      kafkaWrapper.client
-    );
-    const mongoId = new mongoose.Types.ObjectId().toHexString();
-    await ticketCreatedProducer.produce({
-      id: "123",
-      title: "concert",
-      price: 20,
-      userId: mongoId,
-    });
+    console.log("Connected to Kafka");
   } catch (err) {
     console.error(err);
   }
