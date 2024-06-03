@@ -8,7 +8,7 @@ import {
 } from "@yonraztickets/common";
 import { Ticket } from "../models/Ticket";
 import { TicketUpdatedProducer } from "../events/Producers/TicketUpdatedProducer";
-import { kafkaWrapper } from "../events/kafka-wrapper";
+import { kafkaWrapper } from "../kafka-wrapper";
 
 const router = express.Router();
 

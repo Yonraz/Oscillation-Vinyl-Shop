@@ -3,7 +3,7 @@ import { body } from "express-validator";
 import { requireAuth, validateRequest } from "@yonraztickets/common";
 import { Ticket } from "../models/Ticket";
 import { TicketCreatedProducer } from "../events/Producers/TicketCreatedProducer";
-import { kafkaWrapper } from "../events/kafka-wrapper";
+import { kafkaWrapper } from "../kafka-wrapper";
 
 const router = express.Router();
 
@@ -26,6 +26,7 @@ router.post(
     });
     await ticket.save();
     const producer = new TicketCreatedProducer(kafkaWrapper.client);
+    console.log(producer);
     await producer.produce({
       id: ticket.id,
       title: ticket.title,

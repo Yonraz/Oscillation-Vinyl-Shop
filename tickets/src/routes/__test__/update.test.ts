@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import { getInvalidId } from "../../utils/utils";
-import { kafkaWrapper } from "../../events/kafka-wrapper";
+import { kafkaWrapper } from "../../kafka-wrapper";
 
 const invalidTitle = "";
 const invalidPrice = -10;

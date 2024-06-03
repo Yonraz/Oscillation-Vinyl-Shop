@@ -1,7 +1,7 @@
 import "express-async-errors";
 import mongoose from "mongoose";
 import { app } from "./app";
-import { kafkaWrapper } from "./events/kafka-wrapper";
+import { kafkaWrapper } from "./kafka-wrapper";
 
 const startup = async () => {
   if (!process.env.JWT_KEY) {
