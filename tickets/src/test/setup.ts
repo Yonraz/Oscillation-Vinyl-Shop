@@ -1,7 +1,5 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
-import request from "supertest";
 import mongoose from "mongoose";
-import { app } from "../app";
 import jwt from "jsonwebtoken";
 
 let mongo: any;
@@ -9,6 +7,7 @@ let mongo: any;
 declare global {
   var signup: () => string[];
 }
+jest.mock("../events/kafka-wrapper");
 
 beforeAll(async () => {
   process.env.JWT_KEY = "asdfasd";

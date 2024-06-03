@@ -7,6 +7,8 @@ import {
   validateRequest,
 } from "@yonraztickets/common";
 import { Ticket } from "../models/Ticket";
+import { TicketUpdatedProducer } from "../events/Producers/TicketUpdatedProducer";
+import { kafkaWrapper } from "../events/kafka-wrapper";
 
 const router = express.Router();
 
@@ -34,6 +36,12 @@ router.put(
       price: req.body.price,
     });
     await ticket.save();
+    await new TicketUpdatedProducer(kafkaWrapper.client).produce({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
     res.send(ticket);
   }
 );

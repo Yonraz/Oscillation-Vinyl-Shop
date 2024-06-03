@@ -1,8 +1,7 @@
 import "express-async-errors";
 import mongoose from "mongoose";
 import { app } from "./app";
-import { KafkaWrapper } from "./kafka/models/kafka-wrapper";
-import { TicketCreatedProducer } from "./kafka/models/TicketCreatedProducer";
+import { kafkaWrapper } from "./events/kafka-wrapper";
 
 const startup = async () => {
   if (!process.env.JWT_KEY) {
@@ -18,15 +17,9 @@ const startup = async () => {
     throw new Error("KAFKA_BROKER must be defined");
   }
   try {
-    const kafkaWrapper = new KafkaWrapper();
     await kafkaWrapper.connect(process.env.KAFKA_CLIENT_ID!, [
       process.env.KAFKA_BROKER!,
     ]);
-    console.log("Connected to Kafka");
-  } catch (err) {
-    console.error(err);
-  }
-  try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
   } catch (err) {

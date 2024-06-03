@@ -3,6 +3,7 @@ import { app } from "../../app";
 import mongoose from "mongoose";
 import { getInvalidId } from "../../utils/utils";
 
+
 it("returns 404 if the ticket is not found", async () => {
   const id = getInvalidId();
   await request(app).get(`/api/tickets/${id}`).send().expect(404);

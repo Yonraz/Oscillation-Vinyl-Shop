@@ -1,6 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
-import { Ticket, TicketModel } from "../../models/Ticket";
+import { Ticket } from "../../models/Ticket";
+
 
 it("has a route listening to /api/tickets for post requests", async () => {
   const response = await request(app).post("/api/tickets").send({});
