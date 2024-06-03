@@ -1,6 +1,6 @@
 import { Kafka, Producer } from "kafkajs";
 
-class KafkaWrapper {
+export class KafkaWrapper {
   private _client?: Kafka;
   private _producer?: Producer;
 
