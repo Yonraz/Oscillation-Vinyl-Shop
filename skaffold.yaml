@@ -1,42 +1,91 @@
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v4beta10
 kind: Config
-deploy:
-  kubectl:
-    manifests:
-      - ./infra/k8s/*
 build:
-  local:
-    push: false
   # googleCloudBuild:
   #   projectId: myticketing-dev-420512
   artifacts:
-    - image: yonrazticketing/auth    # us.gcr.io/myticketing-dev-420512/auth
+    - image: yonrazticketing/auth # us.gcr.io/myticketing-dev-420512/auth
       context: auth
-      docker:
-        dockerfile: Dockerfile
       sync:
         manual:
-          - src: "src/**/*.ts"
+          - src: src/**/*.ts
             dest: .
+      docker:
+        dockerfile: Dockerfile
     - image: yonrazticketing/client # us.gcr.io/myticketing-dev-420512/client
       context: client
-      docker:
-        dockerfile: Dockerfile
       sync:
         manual:
-          - src: "src/**/*.js"
+          - src: src/**/*.js
             dest: .
-          - src: "src/**/*.ts"
+          - src: src/**/*.ts
             dest: .
-          - src: "src/**/*.tsx"
+          - src: src/**/*.tsx
             dest: .
-          - src: "src/**/*.jsx"
+          - src: src/**/*.jsx
             dest: .
+      docker:
+        dockerfile: Dockerfile
     - image: yonrazticketing/tickets # us.gcr.io/myticketing-dev-420512/tickets
       context: tickets
-      docker:
-        dockerfile: Dockerfile
       sync:
         manual:
-          - src: "src/**/*.ts"
+          - src: src/**/*.ts
             dest: .
+      docker:
+        dockerfile: Dockerfile
+  local:
+    push: false
+manifests:
+  rawYaml:
+    - ./infra/k8s/kafka-namespace.yaml
+    - ./infra/k8s/zookeeper-depl.yaml
+    - ./infra/k8s/kafka-depl.yaml
+    - ./infra/k8s/*
+deploy:
+  kubectl: {}
+
+  # apiVersion: skaffold/v2alpha3
+# kind: Config
+# deploy:
+#   kubectl:
+#     manifests:
+#       - ./infra/k8s/*
+# build:
+#   local:
+#     push: false
+#   # googleCloudBuild:
+#   #   projectId: myticketing-dev-420512
+#   artifacts:
+#     - image: yonrazticketing/auth    # us.gcr.io/myticketing-dev-420512/auth
+#       context: auth
+#       docker:
+#         dockerfile: Dockerfile
+#       sync:
+#         manual:
+#           - src: "src/**/*.ts"
+#             dest: .
+#     - image: yonrazticketing/client # us.gcr.io/myticketing-dev-420512/client
+#       context: client
+#       docker:
+#         dockerfile: Dockerfile
+#       sync:
+#         manual:
+#           - src: "src/**/*.js"
+#             dest: .
+#           - src: "src/**/*.ts"
+#             dest: .
+#           - src: "src/**/*.tsx"
+#             dest: .
+#           - src: "src/**/*.jsx"
+#             dest: .
+#     - image: yonrazticketing/tickets # us.gcr.io/myticketing-dev-420512/tickets
+#       context: tickets
+#       docker:
+#         dockerfile: Dockerfile
+#       sync:
+#         manual:
+#           - src: "src/**/*.ts"
+#             dest: .
+
+# ---
