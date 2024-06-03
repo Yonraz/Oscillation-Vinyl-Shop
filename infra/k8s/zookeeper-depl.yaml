@@ -1,10 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: zookeeper
-  name: zookeeper
-  namespace: kafka
+  name: zookeeper-depl
 spec:
   replicas: 1
   selector:
@@ -16,25 +13,30 @@ spec:
         app: zookeeper
     spec:
       containers:
-        - image: wurstmeister/zookeeper
-          imagePullPolicy: IfNotPresent
-          name: zookeeper
+        - name: zookeeper
+          image: bitnami/zookeeper:latest
           ports:
             - containerPort: 2181
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          env:
+            - name: ALLOW_ANONYMOUS_LOGIN
+              value: "yes"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app: zookeeper-srv
   name: zookeeper-srv
-  namespace: kafka
 spec:
-  type: NodePort
-  ports:
-    - name: zookeeper-port
-      port: 2181
-      nodePort: 30181
-      targetPort: 2181
   selector:
     app: zookeeper
+  ports:
+    - name: zookeeper
+      protocol: TCP
+      port: 2181
+      targetPort: 2181

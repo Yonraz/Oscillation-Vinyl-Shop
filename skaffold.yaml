@@ -38,7 +38,6 @@ build:
     push: false
 manifests:
   rawYaml:
-    - ./infra/k8s/kafka-namespace.yaml
     - ./infra/k8s/zookeeper-depl.yaml
     - ./infra/k8s/kafka-depl.yaml
     - ./infra/k8s/*
