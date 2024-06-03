@@ -25,7 +25,8 @@ router.post(
       userId: req.currentUser!.id,
     });
     await ticket.save();
-    await new TicketCreatedProducer(kafkaWrapper.client).produce({
+    const producer = new TicketCreatedProducer(kafkaWrapper.client);
+    await producer.produce({
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,

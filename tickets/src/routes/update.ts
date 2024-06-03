@@ -36,7 +36,8 @@ router.put(
       price: req.body.price,
     });
     await ticket.save();
-    await new TicketUpdatedProducer(kafkaWrapper.client).produce({
+    const producer = new TicketUpdatedProducer(kafkaWrapper.client);
+    await producer.produce({
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,

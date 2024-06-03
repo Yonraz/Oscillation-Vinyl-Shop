@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import { Ticket } from "../../models/Ticket";
-
+import { kafkaWrapper } from "../../events/kafka-wrapper";
 
 it("has a route listening to /api/tickets for post requests", async () => {
   const response = await request(app).post("/api/tickets").send({});
@@ -77,4 +77,18 @@ it("creates a ticket with valid inputs", async () => {
 
   expect(tickets[0].price).toEqual(10);
   expect(tickets[0].title).toEqual(title);
+});
+
+it("publishes an event", async () => {
+  const title = "Thundercat";
+  await request(app)
+    .post("/api/tickets")
+    .set("Cookie", global.signup())
+    .send({
+      title,
+      price: 10,
+    })
+    .expect(201);
+
+  expect(kafkaWrapper.client.producer().send).toHaveBeenCalled();
 });

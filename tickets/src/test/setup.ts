@@ -7,6 +7,7 @@ let mongo: any;
 declare global {
   var signup: () => string[];
 }
+
 jest.mock("../events/kafka-wrapper");
 
 beforeAll(async () => {
