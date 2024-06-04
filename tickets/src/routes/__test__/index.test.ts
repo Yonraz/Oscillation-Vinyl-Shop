@@ -12,6 +12,8 @@ function createTicket() {
 
 }
 
+
+
 it('fetches a list of tickets', async () => {
     //create 3 tickets
     await createTicket();

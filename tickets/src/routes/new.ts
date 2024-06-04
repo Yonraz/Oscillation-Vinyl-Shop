@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { requireAuth, validateRequest } from "@yonraztickets/common";
 import { Ticket } from "../models/Ticket";
+import { TicketCreatedProducer } from "../events/Producers/TicketCreatedProducer";
+import { kafkaWrapper } from "../kafka-wrapper";
 
 const router = express.Router();
 
@@ -16,18 +18,22 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    try {
-      const { title, price } = req.body;
-      const ticket = Ticket.build({
-        title,
-        price,
-        userId: req.currentUser!.id,
-      });
-      await ticket.save();
-      res.status(201).send(ticket);
-    } catch (error) {
-      res.sendStatus(500);
-    }
+    const { title, price } = req.body;
+    const ticket = Ticket.build({
+      title,
+      price,
+      userId: req.currentUser!.id,
+    });
+    await ticket.save();
+    const producer = new TicketCreatedProducer(kafkaWrapper.client);
+    console.log(producer);
+    await producer.produce({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
+    res.status(201).send(ticket);
   }
 );
 
