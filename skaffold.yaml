@@ -34,6 +34,14 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
+    - image: yonrazticketing/orders # us.gcr.io/myticketing-dev-420512/tickets
+      context: orders
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
   local:
     push: false
 manifests:
