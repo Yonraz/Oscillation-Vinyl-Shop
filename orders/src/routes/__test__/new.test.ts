@@ -48,7 +48,6 @@ it("returns an error if ticket is reserved", async () => {
   const ticket = Ticket.build({
     title: "stevie wonder",
     price: 300,
-    version: 1,
   });
   await ticket.save();
   const order = Order.build({
@@ -71,7 +70,6 @@ it("reserves a valid ticket", async () => {
   const ticket = Ticket.build({
     title: "stevie wonder",
     price: 300,
-    version: 1,
   });
   await ticket.save();
   await request(app)

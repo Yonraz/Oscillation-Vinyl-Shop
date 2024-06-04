@@ -5,13 +5,11 @@ import { OrderStatus } from "@yonraztickets/common";
 interface TicketAttributes {
   title: string;
   price: number;
-  version: number;
 }
 
 export interface TicketDocument extends mongoose.Document {
   title: string;
   price: number;
-  version: number;
   isReserved(): Promise<boolean>;
 }
 
@@ -32,7 +30,7 @@ const ticketSchema = new mongoose.Schema(
     },
     version: {
       type: Number,
-      required: true,
+      default: 1,
     },
   },
   {
@@ -50,7 +48,6 @@ ticketSchema.statics.build = (attrs: TicketAttributes) => {
 };
 
 ticketSchema.methods.isReserved = async function () {
-  console.log("hi");
   const reserved = await Order.findOne({
     ticket: this,
     status: {
