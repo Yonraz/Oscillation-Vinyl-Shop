@@ -47,6 +47,7 @@ it("returns an error if the ticket doesnt exist", async () => {
 
 it("returns an error if ticket is reserved", async () => {
   const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "stevie wonder",
     price: 300,
   });
@@ -69,6 +70,7 @@ it("returns an error if ticket is reserved", async () => {
 
 it("reserves a valid ticket", async () => {
   const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: "stevie wonder",
     price: 300,
   });
@@ -83,17 +85,18 @@ it("reserves a valid ticket", async () => {
 });
 
 it("emits and order created event", async () => {
-    const ticket = Ticket.build({
-      title: "stevie wonder",
-      price: 300,
-    });
-    await ticket.save();
-    await request(app)
-      .post("/api/orders")
-      .set("Cookie", global.signup())
-      .send({
-        ticketId: ticket.id,
-      })
-      .expect(201);
-    expect(kafkaWrapper.client.producer().send).toHaveBeenCalled();
+  const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: "stevie wonder",
+    price: 300,
+  });
+  await ticket.save();
+  await request(app)
+    .post("/api/orders")
+    .set("Cookie", global.signup())
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+  expect(kafkaWrapper.client.producer().send).toHaveBeenCalled();
 });

@@ -1,0 +1,26 @@
+import { EachMessagePayload } from "kafkajs";
+import {
+  Topics,
+  BaseConsumer,
+  TicketUpdatedEvent,
+  NotFoundError,
+} from "@yonraztickets/common";
+import { Ticket } from "../../models/Ticket";
+import { groupId } from "./GroupId";
+
+export class TicketUpdatedConsumer extends BaseConsumer<TicketUpdatedEvent> {
+  topic: Topics.TicketUpdated = Topics.TicketUpdated;
+  groupId: string = groupId;
+  async onMessage(
+    data: TicketUpdatedEvent["data"],
+    payload: EachMessagePayload
+  ): Promise<void> {
+    const { id, title, price } = data;
+    const ticket = await Ticket.findById(id);
+    if (!ticket) {
+      throw new NotFoundError();
+    }
+    ticket.set({ title, price });
+    await ticket.save();
+  }
+}
