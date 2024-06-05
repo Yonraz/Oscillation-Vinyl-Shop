@@ -1,10 +1,8 @@
-import BuildClient from "@/api/build-client";
-import { CurrentUser } from "@/types/currentUser";
-import axios from "axios";
-import { NextPageContext } from "next";
+import { useUser } from "@/context/user-context";
 import Link from "next/link";
 
-export default function Header(props: { currentUser: CurrentUser }) {
+export default function Header() {
+  const { currentUser } = useUser();
   return (
     <>
       <nav className="h-12 bg-slate-400 px-6 text-gray-800 flex items-center mb-3 w-full">
@@ -12,7 +10,7 @@ export default function Header(props: { currentUser: CurrentUser }) {
           Ticketing
         </Link>
         <div className="absolute right-0 mx-6">
-          {props.currentUser ? (
+          {currentUser ? (
             <Link href="/auth/signout">Sign Out</Link>
           ) : (
             <>

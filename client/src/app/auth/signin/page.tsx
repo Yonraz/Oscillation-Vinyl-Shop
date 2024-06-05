@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import LoadingSpinner from "../../../components/loadingSpinner/LoadingSpinner";
+import LoadingSpinner from "@/components/loadingSpinner/LoadingSpinner";
 import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/navigation";
 
@@ -10,7 +10,7 @@ interface FormFields {
   password: string;
 }
 
-export default function Signup() {
+export default function Signin() {
   const {
     register,
     handleSubmit,
@@ -24,7 +24,7 @@ export default function Signup() {
       const { email, password } = data;
 
       await sendRequest({
-        url: "/api/users/signup",
+        url: "/api/users/signin",
         method: "post",
         body: {
           email,
@@ -100,17 +100,17 @@ export default function Signup() {
               type="submit"
               disabled={isSubmitting}
             >
-              Sign Up
+              Sign In
             </button>
             <a
               className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-              onClick={() => router.push("/auth/signin")}
+              onClick={() => router.push("/auth/signup")}
             >
-              Already have an account?
+              Do not have an account?
             </a>
           </div>
           {requestErrors && (
-            <div className="w-full bg-red-300">
+            <div className="w-full">
               {requestErrors.map((err, index) => (
                 <li
                   key={index}

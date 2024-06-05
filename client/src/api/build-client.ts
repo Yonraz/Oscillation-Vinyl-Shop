@@ -1,24 +1,22 @@
-import axios from "axios";
-import { NextPageContext } from "next";
+import axios, { AxiosInstance } from "axios";
+import { getClientCookie } from "@/utils/get-cookie";
 
-export default async function BuildClient(context: NextPageContext) {
+export const buildClient = async (): Promise<AxiosInstance | null> => {
   try {
-    const { req } = context;
-    if (typeof window === "undefined") {
-      console.log("creating axios instance");
-      // running on server
-      return axios.create({
-        baseURL:
-          "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local", //ingress-nginx-controller.ingress-nginx.svc.cluster.local
-        headers: req!.headers,
-      });
-    } else {
-      // running on browser
-      return axios.create({
-        baseURL: "/",
-      });
-    }
-  } catch (error: any) {
-    console.error(error.message);
+    const cookie = await getClientCookie("session");
+    const baseURL =
+      typeof window === "undefined"
+        ? "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/"
+        : "/";
+
+    const headers =
+      typeof window === "undefined" && cookie
+        ? { Cookie: `session=${cookie}, Host: "ticketing.dev"` }
+        : {};
+
+    return axios.create({ baseURL, headers });
+  } catch (error) {
+    console.error("Failed to initialize axios client:", error);
+    return null;
   }
-}
+};
