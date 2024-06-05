@@ -1,8 +1,10 @@
-import { Kafka, Producer } from "kafkajs";
+import { Topics } from "@yonraztickets/common";
+import { Admin, Kafka, Producer } from "kafkajs";
 
 class KafkaWrapper {
   private _client?: Kafka;
   private _producer?: Producer;
+  private _admin?: Admin;
 
   get client() {
     if (!this._client) {
@@ -23,6 +25,29 @@ class KafkaWrapper {
     this._producer = this._client.producer();
     await this._producer.connect();
     console.log("Connected to Kafka");
+    this._admin = this._client.admin();
+    await this._admin.connect();
+    console.log("Connected to Kafka Admin");
+    await this.createTopics(Object.values(Topics));
+  }
+  private async createTopics(topics: string[]) {
+    if (!this._admin) {
+      throw new Error("Cannot access Kafka admin before connecting");
+    }
+    const existingTopics = await this._admin.listTopics();
+    const topicsToCreate = topics.filter(
+      (topic) => !existingTopics.includes(topic)
+    );
+
+    if (topicsToCreate.length > 0) {
+      await this._admin.createTopics({
+        topics: topicsToCreate.map((topic) => ({ topic })),
+        waitForLeaders: true,
+      });
+      console.log(`Topics created: ${topicsToCreate.join(", ")}`);
+    } else {
+      console.log("All topics already exist.");
+    }
   }
 }
 

@@ -14,6 +14,7 @@ export class TicketCreatedConsumer extends BaseConsumer<TicketCreatedEvent> {
     data: TicketCreatedEvent["data"],
     payload: EachMessagePayload
   ): Promise<void> {
+    console.log("Event data!", data);
     const { id, title, price } = data;
     const ticket = Ticket.build({
       id,

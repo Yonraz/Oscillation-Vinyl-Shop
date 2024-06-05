@@ -4,6 +4,7 @@ import { app } from "./app";
 import { kafkaWrapper } from "./kafka-wrapper";
 import { TicketCreatedConsumer } from "./events/Consumers/TicketCreatedConsumer";
 import { TicketUpdatedConsumer } from "./events/Consumers/TicketUpdatedConsumer";
+import { Topics } from "@yonraztickets/common";
 
 const startup = async () => {
   if (!process.env.JWT_KEY) {
@@ -26,11 +27,12 @@ const startup = async () => {
     const ticketCreatedConsumer = new TicketCreatedConsumer(
       kafkaWrapper.client
     );
-    ticketCreatedConsumer.consume();
+    await ticketCreatedConsumer.consume();
+    // listen for ticket updated events
     const ticketUpdatedConsumer = new TicketUpdatedConsumer(
       kafkaWrapper.client
     );
-    ticketUpdatedConsumer.consume();
+    await ticketUpdatedConsumer.consume();
 
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
