@@ -4,6 +4,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import LoadingSpinner from "@/components/loadingSpinner/LoadingSpinner";
 import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/user-context";
+import { CurrentUser } from "@/types/currentUser";
 
 interface FormFields {
   email: string;
@@ -18,6 +20,7 @@ export default function Signin() {
   } = useForm<FormFields>();
   const { requestErrors, sendRequest, isLoading } = useRequest();
   const router = useRouter();
+  const { setCurrentUser } = useUser();
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       if (errors.email || errors.password) return;
@@ -30,7 +33,10 @@ export default function Signin() {
           email,
           password,
         },
-        onSuccess: (value: any) => router.push("/"),
+        onSuccess: (value: any) => {
+          setCurrentUser(value);
+          router.push("/");
+        },
       });
     } catch (error) {
       console.error(error);

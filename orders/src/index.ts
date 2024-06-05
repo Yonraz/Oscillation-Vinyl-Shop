@@ -28,7 +28,6 @@ const startup = async () => {
       kafkaWrapper.client
     );
     await ticketCreatedConsumer.consume();
-    // listen for ticket updated events
     const ticketUpdatedConsumer = new TicketUpdatedConsumer(
       kafkaWrapper.client
     );

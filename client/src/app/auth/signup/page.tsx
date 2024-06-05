@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import LoadingSpinner from "@/components/loadingSpinner/LoadingSpinner";
 import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/user-context";
 
 interface FormFields {
   email: string;
@@ -17,6 +18,7 @@ export default function Signup() {
     formState: { errors, isSubmitting },
   } = useForm<FormFields>();
   const { requestErrors, sendRequest, isLoading } = useRequest();
+  const { setCurrentUser } = useUser();
   const router = useRouter();
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
@@ -30,7 +32,10 @@ export default function Signup() {
           email,
           password,
         },
-        onSuccess: (value: any) => router.push("/"),
+        onSuccess: (value: any) => {
+          setCurrentUser(value);
+          router.push("/");
+        },
       });
     } catch (error) {
       console.error(error);

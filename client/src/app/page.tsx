@@ -1,3 +1,4 @@
+"use client";
 import { useUser } from "@/context/user-context";
 
 const Home = () => {
@@ -13,3 +14,4 @@ const Home = () => {
     </>
   );
 };
+export default Home;
