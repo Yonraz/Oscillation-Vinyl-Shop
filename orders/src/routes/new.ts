@@ -9,6 +9,8 @@ import {
 } from "@yonraztickets/common";
 import { Ticket } from "../models/Ticket";
 import { Order } from "../models/Order";
+import { OrderCreatedProducer } from "../events/producers/OrderCreatedProducer";
+import { kafkaWrapper } from "../kafka-wrapper";
 
 const EXPIRATION_WINDOW_SECONDS = 15 * 60;
 
@@ -43,6 +45,17 @@ router.post(
     });
     await order.save();
     // emit an order created event
+    const producer = new OrderCreatedProducer(kafkaWrapper.client);
+    producer.produce({
+      id: order.id,
+      status: order.status,
+      expiresAt: order.expiresAt.toISOString(),
+      userId: order.userId,
+      ticket: {
+        id: order.ticket.id,
+        price: order.ticket.price,
+      },
+    });
 
     res.status(201).send(order);
   }

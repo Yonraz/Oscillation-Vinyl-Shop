@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { Ticket } from "../../models/Ticket";
 import { Order } from "../../models/Order";
 import { OrderStatus } from "@yonraztickets/common";
+import { kafkaWrapper } from "../../kafka-wrapper";
 
 it("has a route listening to /api/tickets for post requests", async () => {
   const response = await request(app).post("/api/orders").send({});
@@ -81,4 +82,18 @@ it("reserves a valid ticket", async () => {
     .expect(201);
 });
 
-it.todo("emits and order created event");
+it("emits and order created event", async () => {
+    const ticket = Ticket.build({
+      title: "stevie wonder",
+      price: 300,
+    });
+    await ticket.save();
+    await request(app)
+      .post("/api/orders")
+      .set("Cookie", global.signup())
+      .send({
+        ticketId: ticket.id,
+      })
+      .expect(201);
+    expect(kafkaWrapper.client.producer().send).toHaveBeenCalled();
+});
