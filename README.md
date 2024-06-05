@@ -9,7 +9,7 @@ A fullstack web application for buying and selling tickets. Users can view ticke
 * **Frontend:** Built with **React** and **Next.js 14**.
 * **Backend Services:** Each service is developed using **Node.js** and **Express**.
 * **Languages:** Both frontend and backend are written in **TypeScript**.
-* **Databases:** **MongoDB** and **Redis** are used for each service.
+* **Databases:** **MongoDB** or **Redis** are used for each service.
 * **Containerization:** The entire app runs on **Docker** containers within a **Kubernetes** cluster.
 * **Event Handling and Microservice Communication:** Managed by **Apache Kafka**.
 * **Styling:** **TailwindCSS** is used as the frontend styling framework.
