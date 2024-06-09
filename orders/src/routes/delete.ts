@@ -30,6 +30,7 @@ router.delete(
     const producer = new OrderCancelledProducer(kafkaWrapper.client);
     producer.produce({
       id: order.id,
+      version: order.version,
       ticket: {
         id: order.ticket.id,
       },

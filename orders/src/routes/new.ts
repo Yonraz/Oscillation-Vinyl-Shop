@@ -48,6 +48,7 @@ router.post(
     const producer = new OrderCreatedProducer(kafkaWrapper.client);
     producer.produce({
       id: order.id,
+      version: order.version,
       status: order.status,
       expiresAt: order.expiresAt.toISOString(),
       userId: order.userId,
