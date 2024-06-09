@@ -16,7 +16,8 @@ export class TicketUpdatedConsumer extends BaseConsumer<TicketUpdatedEvent> {
     payload: EachMessagePayload
   ): Promise<void> {
     const { id, title, price } = data;
-    const ticket = await Ticket.findById(id);
+    const ticket = await Ticket.findOne({ _id: id, version: data.version - 1 });
+    
     if (!ticket) {
       throw new NotFoundError();
     }

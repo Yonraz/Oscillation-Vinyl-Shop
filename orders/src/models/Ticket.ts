@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Order } from "./Order";
 import { OrderStatus } from "@yonraztickets/common";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface TicketAttributes {
   id: string;
@@ -11,6 +12,7 @@ interface TicketAttributes {
 export interface TicketDocument extends mongoose.Document {
   title: string;
   price: number;
+  version: number;
   isReserved(): Promise<boolean>;
 }
 
@@ -65,6 +67,9 @@ ticketSchema.methods.isReserved = async function () {
   });
   return !!reserved;
 };
+
+ticketSchema.set("versionKey", "version");
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 const Ticket = mongoose.model<TicketDocument, TicketModel>(
   "Ticket",
