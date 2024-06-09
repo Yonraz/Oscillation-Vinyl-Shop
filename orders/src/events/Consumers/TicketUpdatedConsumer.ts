@@ -10,7 +10,7 @@ import { groupId } from "./GroupId";
 
 export class TicketUpdatedConsumer extends BaseConsumer<TicketUpdatedEvent> {
   topic: Topics.TicketUpdated = Topics.TicketUpdated;
-  groupId: string = groupId;
+  groupId: string = "orders-service/ticket-updated";
   async onMessage(
     data: TicketUpdatedEvent["data"],
     payload: EachMessagePayload
