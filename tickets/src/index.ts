@@ -2,6 +2,8 @@ import "express-async-errors";
 import mongoose from "mongoose";
 import { app } from "./app";
 import { kafkaWrapper } from "./kafka-wrapper";
+import { OrderCreatedConsumer } from "./events/Consumers/OrderCreatedConsumer";
+import { OrderCancelledConsumer } from "./events/Consumers/OrderCancelledConsumer";
 
 const startup = async () => {
   if (!process.env.JWT_KEY) {
@@ -20,6 +22,11 @@ const startup = async () => {
     await kafkaWrapper.connect(process.env.KAFKA_CLIENT_ID!, [
       process.env.KAFKA_BROKER!,
     ]);
+    console.log("Connected to Kafka");
+    
+    await new OrderCreatedConsumer(kafkaWrapper.client).consume();
+    await new OrderCancelledConsumer(kafkaWrapper.client).consume();
+
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
   } catch (err) {

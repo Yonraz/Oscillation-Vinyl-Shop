@@ -2,6 +2,8 @@ import request from "supertest";
 import { app } from "../../app";
 import { getInvalidId } from "../../utils/utils";
 import { kafkaWrapper } from "../../kafka-wrapper";
+import mongoose from "mongoose";
+import { Ticket } from "../../models/Ticket";
 
 const invalidTitle = "";
 const invalidPrice = -10;
@@ -135,4 +137,29 @@ it("publishes an event", async () => {
     .expect(200);
 
   expect(kafkaWrapper.client.producer().send).toHaveBeenCalled();
+});
+
+it("rejects attempt to update a reserved ticket", async () => {
+  const cookie = global.signup();
+
+  const response = await request(app)
+    .post("/api/tickets")
+    .set("Cookie", cookie)
+    .send({
+      title,
+      price,
+    });
+
+  const ticket = await Ticket.findById(response.body.id);
+  ticket!.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+  await ticket!.save();
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set("Cookie", cookie)
+    .send({
+      title: "new title",
+      price: 100,
+    })
+    .expect(400);
 });

@@ -79,7 +79,7 @@ it("creates a ticket with valid inputs", async () => {
   expect(tickets[0].title).toEqual(title);
 });
 
-it("publishes an event", async () => {
+it("emits an event", async () => {
   const title = "Thundercat";
   await request(app)
     .post("/api/tickets")
