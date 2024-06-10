@@ -2,10 +2,14 @@ import { BaseConsumer, OrderCreatedEvent, Topics } from "@yonraztickets/common";
 import { EachMessagePayload, Kafka } from "kafkajs";
 import { Ticket } from "../../models/Ticket";
 import { TicketUpdatedProducer } from "../Producers/TicketUpdatedProducer";
+import { kafkaWrapper } from "../../kafka-wrapper";
 
 export class OrderCreatedConsumer extends BaseConsumer<OrderCreatedEvent> {
   topic: Topics.OrderCreated = Topics.OrderCreated;
   groupId: string = "tickets-service/order-created";
+  constructor(client: Kafka) {
+    super(client);
+  }
   async onMessage(
     data: OrderCreatedEvent["data"],
     message: EachMessagePayload

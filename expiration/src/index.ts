@@ -1,4 +1,3 @@
-import "express-async-errors";
 import { kafkaWrapper } from "./kafka-wrapper";
 import { OrderCreatedConsumer } from "./events/consumers/order-created-consumer";
 

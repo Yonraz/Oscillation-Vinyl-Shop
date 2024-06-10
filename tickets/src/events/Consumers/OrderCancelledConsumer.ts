@@ -20,12 +20,15 @@ export class OrderCancelledConsumer extends BaseConsumer<OrderCancelledEvent> {
     }
     ticket.set({ orderId: undefined });
     await ticket.save();
+    //@ts-ignore
     const producer = new TicketUpdatedProducer(this.client);
+    //@ts-ignore
     await producer.produce({
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,
       userId: ticket.userId,
+      //@ts-ignore
       orderId: ticket.orderId,
       version: ticket.version,
     });
