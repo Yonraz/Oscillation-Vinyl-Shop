@@ -1,5 +1,6 @@
 import "express-async-errors";
 import { kafkaWrapper } from "./kafka-wrapper";
+import { OrderCreatedConsumer } from "./events/consumers/order-created-consumer";
 
 const startup = async () => {
   if (!process.env.KAFKA_CLIENT_ID) {
@@ -12,6 +13,7 @@ const startup = async () => {
     await kafkaWrapper.connect(process.env.KAFKA_CLIENT_ID!, [
       process.env.KAFKA_BROKER!,
     ]);
+    await new OrderCreatedConsumer(kafkaWrapper.client).consume();
     console.log("Connected to Kafka");
   } catch (err) {
     console.error(err);
