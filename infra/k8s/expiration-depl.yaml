@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expiration
+  template:
+    metadata:
+      labels:
+        app: expiration
+    spec:
+      containers:
+        - name: expiration
+          image: yonrazticketing/expiration # us.gcr.io/myticketing-dev-420512/expiration
+          env:
+            - name: REDIS_HOST
+              value: "expiration-redis-srv"
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: KAFKA_CLIENT_ID
+              value: "expiration"
+            - name: KAFKA_BROKER
+              value: "kafka-srv:9092"
