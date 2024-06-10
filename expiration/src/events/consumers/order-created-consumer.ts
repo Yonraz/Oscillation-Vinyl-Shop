@@ -9,8 +9,15 @@ export class OrderCreatedConsumer extends BaseConsumer<OrderCreatedEvent> {
     data: OrderCreatedEvent["data"],
     payload: EachMessagePayload
   ) {
-    await expirationQueue.add({
-      orderId: data.id,
-    });
+    const delay = new Date(data.expiresAt).getTime() - new Date().getTime();
+    console.log(`Waiting ${delay} milliseconds to process the job`);
+    await expirationQueue.add(
+      {
+        orderId: data.id,
+      },
+      {
+        delay,
+      }
+    );
   }
 }
