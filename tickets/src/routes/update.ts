@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
 import {
+  BadRequestError,
   NotFoundError,
   UnauthorizedAccessError,
   requireAuth,
@@ -27,6 +28,9 @@ router.put(
 
     if (!ticket) {
       throw new NotFoundError();
+    }
+    if (ticket.orderId) {
+      throw new BadRequestError("Cannot edit a reserved ticket");
     }
     if (ticket.userId !== req.currentUser!.id) {
       throw new UnauthorizedAccessError();

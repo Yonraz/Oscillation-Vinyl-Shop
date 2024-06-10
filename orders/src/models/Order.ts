@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { TicketDocument } from "./Ticket";
 import { OrderStatus } from "@yonraztickets/common";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface OrderAttributes {
   userId: string;
@@ -53,6 +54,14 @@ const orderSchema = new mongoose.Schema(
 
 orderSchema.statics.build = (attrs: OrderAttributes) => {
   return new Order(attrs);
+};
+orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
+orderSchema.statics.findByEvent = (event: { id: string; version: number }) => {
+  return Order.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  });
 };
 
 const Order = mongoose.model<OrderDocument, OrderModel>("Order", orderSchema);
