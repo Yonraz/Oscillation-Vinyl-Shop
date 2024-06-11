@@ -10,6 +10,8 @@ import { body } from "express-validator";
 import { Order } from "../models/order";
 import { stripe } from "../stripe";
 import { Payment } from "../models/payment";
+import { PaymentCreatedProducer } from "../events/producers/PaymentCreatedProducer";
+import { kafkaWrapper } from "../kafka-wrapper";
 
 const router = express.Router();
 
@@ -41,6 +43,14 @@ router.post(
       stripeId: paymentData.id,
     });
     await payment.save();
+
+    const producer = new PaymentCreatedProducer(kafkaWrapper.client);
+    await producer.produce({
+      id: payment.id,
+      orderId: payment.orderId,
+      stripeId: payment.stripeId,
+    });
+
     res.status(201).send({ success: true });
   }
 );

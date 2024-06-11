@@ -5,6 +5,8 @@ import { kafkaWrapper } from "./kafka-wrapper";
 import { TicketCreatedConsumer } from "./events/Consumers/TicketCreatedConsumer";
 import { TicketUpdatedConsumer } from "./events/Consumers/TicketUpdatedConsumer";
 import { Topics } from "@yonraztickets/common";
+import { PaymentCreatedConsumer } from "./events/Consumers/PaymentCreatedConsumer";
+import { ExpirationCompleteConsumer } from "./events/Consumers/ExpirationCompleteConsumer";
 
 const startup = async () => {
   if (!process.env.JWT_KEY) {
@@ -32,6 +34,14 @@ const startup = async () => {
       kafkaWrapper.client
     );
     await ticketUpdatedConsumer.consume();
+    const expirationCompleteConsumer = new ExpirationCompleteConsumer(
+      kafkaWrapper.client
+    );
+    await expirationCompleteConsumer.consume();
+    const paymentCreatedConsumer = new PaymentCreatedConsumer(
+      kafkaWrapper.client
+    );
+    await paymentCreatedConsumer.consume();
 
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
