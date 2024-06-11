@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments
+  template:
+    metadata:
+      labels:
+        app: payments
+    spec:
+      containers:
+        - name: payments
+          image: yonrazticketing/payments # us.gcr.io/myticketing-dev-420512/tickets
+          env:
+            - name: MONGO_URI
+              value: "mongodb://payments-mongo-srv:27017/payments"
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: KAFKA_CLIENT_ID
+              value: "payments"
+            - name: KAFKA_BROKER
+              value: "kafka-srv:9092"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-srv
+spec:
+  selector:
+    app: payments
+  ports:
+    - name: payments
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
