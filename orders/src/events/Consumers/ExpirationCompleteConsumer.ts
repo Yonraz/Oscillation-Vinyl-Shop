@@ -19,7 +19,9 @@ export class ExpirationCompleteConsumer extends BaseConsumer<ExpirationCompleteE
     if (!order) {
       throw new Error("Order not found");
     }
-
+    if (order.status === OrderStatus.Complete) {
+      return;
+    }
     order.set({ status: OrderStatus.Cancelled });
     await order.save();
     await new OrderCancelledProducer(this.client).produce({

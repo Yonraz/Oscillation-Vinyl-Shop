@@ -15,9 +15,7 @@ export class PaymentCreatedConsumer extends BaseConsumer<PaymentCreatedEvent> {
     if (!order) {
       throw new Error("Order not found");
     }
-    if (order.status === OrderStatus.Complete) {
-      return;
-    }
+    
     order.set({ status: OrderStatus.Complete });
     await order.save();
   }
