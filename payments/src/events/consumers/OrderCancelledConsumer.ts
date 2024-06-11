@@ -8,7 +8,7 @@ import { Order } from "../../models/order";
 
 export class OrderCancelledConsumer extends BaseConsumer<OrderCancelledEvent> {
   topic: Topics.OrderCancelled = Topics.OrderCancelled;
-  groupId: string = "payments-service/order-cancelled";
+  groupId = "payments-service/order-cancelled";
 
   async onMessage(data: OrderCancelledEvent["data"], msg: any) {
     const { id } = data;

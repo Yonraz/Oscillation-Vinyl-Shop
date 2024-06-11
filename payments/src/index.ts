@@ -24,8 +24,12 @@ const startup = async () => {
     ]);
     console.log("Connected to Kafka");
 
-    await new OrderCreatedConsumer(kafkaWrapper.client).consume();
-    await new OrderCancelledConsumer(kafkaWrapper.client).consume();
+    const orderCreatedConsumer = new OrderCreatedConsumer(kafkaWrapper.client);
+    await orderCreatedConsumer.consume();
+    const orderCancelledConsumer = new OrderCancelledConsumer(
+      kafkaWrapper.client
+    );
+    await orderCancelledConsumer.consume();
 
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");

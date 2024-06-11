@@ -49,7 +49,7 @@ build:
       docker:
         dockerfile: Dockerfile
     - image: yonrazticketing/payments # us.gcr.io/myticketing-dev-420512/tickets
-      context: expiration
+      context: payments
       sync:
         manual:
           - src: src/**/*.ts

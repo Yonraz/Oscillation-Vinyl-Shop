@@ -12,7 +12,8 @@ const startup = async () => {
     await kafkaWrapper.connect(process.env.KAFKA_CLIENT_ID!, [
       process.env.KAFKA_BROKER!,
     ]);
-    await new OrderCreatedConsumer(kafkaWrapper.client).consume();
+    const orderCreatedConsumer = new OrderCreatedConsumer(kafkaWrapper.client);
+    await orderCreatedConsumer.consume();
     console.log("Connected to Kafka");
   } catch (err) {
     console.error(err);

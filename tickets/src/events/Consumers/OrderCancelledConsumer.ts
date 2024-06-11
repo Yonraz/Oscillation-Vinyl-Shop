@@ -9,7 +9,7 @@ import { EachMessagePayload } from "kafkajs";
 
 export class OrderCancelledConsumer extends BaseConsumer<OrderCancelledEvent> {
   topic: Topics.OrderCancelled = Topics.OrderCancelled;
-  groupId: string = "tickets-service";
+  groupId: string = "tickets-service/order-cancelled";
   async onMessage(
     data: OrderCancelledEvent["data"],
     message: EachMessagePayload
@@ -19,6 +19,7 @@ export class OrderCancelledConsumer extends BaseConsumer<OrderCancelledEvent> {
       throw new Error("Ticket not found");
     }
     ticket.set({ orderId: undefined });
+    console.log(ticket);
     await ticket.save();
     //@ts-ignore
     const producer = new TicketUpdatedProducer(this.client);
@@ -28,8 +29,6 @@ export class OrderCancelledConsumer extends BaseConsumer<OrderCancelledEvent> {
       title: ticket.title,
       price: ticket.price,
       userId: ticket.userId,
-      //@ts-ignore
-      orderId: ticket.orderId,
       version: ticket.version,
     });
   }
