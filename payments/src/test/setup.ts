@@ -1,11 +1,13 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 let mongo: any;
 
 declare global {
-  var signup: () => string[];
+  var signup: (id?: string) => string[];
 }
 
 jest.mock("../kafka-wrapper");
@@ -33,9 +35,9 @@ afterAll(async () => {
 });
 
 // create mock auth data
-global.signup = () => {
+global.signup = (id?: string) => {
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",
   };
   const token = jwt.sign(payload, process.env.JWT_KEY!);

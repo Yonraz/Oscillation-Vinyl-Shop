@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { kafkaWrapper } from "../../../kafka-wrapper";
 import { Order } from "../../../models/Order";
 import { Ticket } from "../../../models/Ticket";
-import { ExpirationCompleteConsumer } from "../ExpirationCompleteListener";
+import { ExpirationCompleteConsumer } from "../ExpirationCompleteConsumer";
 import {
   ExpirationCompleteEvent,
   OrderStatus,
