@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { TicketDocument } from "./Ticket";
+import { VinylDocument } from "./Vinyl";
 import { OrderStatus } from "@yonraztickets/common";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
@@ -7,14 +7,14 @@ interface OrderAttributes {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
-  ticket: TicketDocument;
+  vinyl: VinylDocument;
 }
 
 interface OrderDocument extends mongoose.Document {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
-  ticket: TicketDocument;
+  vinyl: VinylDocument;
   version: number;
 }
 
@@ -37,9 +37,9 @@ const orderSchema = new mongoose.Schema(
     expiresAt: {
       type: mongoose.Schema.Types.Date,
     },
-    ticket: {
+    vinyl: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Ticket",
+      ref: "Vinyl",
     },
   },
   {

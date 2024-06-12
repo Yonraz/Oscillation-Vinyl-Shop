@@ -14,7 +14,7 @@ const setup = async () => {
     userId: new mongoose.Types.ObjectId().toHexString(),
     expiresAt: new Date().toISOString(),
     status: OrderStatus.Created,
-    ticket: {
+    vinyl: {
       id: new mongoose.Types.ObjectId().toHexString(),
       price: 10,
     },
@@ -36,5 +36,5 @@ it("replicates the order info", async () => {
   await consumer.onMessage(data, message);
   const order = await Order.findById(data.id);
   expect(order).toBeDefined();
-  expect(order!.price).toEqual(data.ticket.price);
+  expect(order!.price).toEqual(data.vinyl.price);
 });

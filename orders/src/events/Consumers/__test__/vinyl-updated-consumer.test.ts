@@ -1,26 +1,28 @@
-import { TicketUpdatedEvent, Topics } from "@yonraztickets/common";
+import { VinylUpdatedEvent, Topics, Genre } from "@yonraztickets/common";
 import { kafkaWrapper } from "../../../kafka-wrapper";
 import mongoose from "mongoose";
 import { EachMessagePayload } from "kafkajs";
-import { Ticket } from "../../../models/Ticket";
-import { TicketUpdatedConsumer } from "../TicketUpdatedConsumer";
+import { Vinyl } from "../../../models/Vinyl";
+import { VinylUpdatedConsumer } from "../VinylUpdatedConsumer";
 
 const setup = async () => {
-  const consumer = new TicketUpdatedConsumer(kafkaWrapper.client);
-  const ticketId = new mongoose.Types.ObjectId().toHexString();
-  const ticket = Ticket.build({
-    id: ticketId,
+  const consumer = new VinylUpdatedConsumer(kafkaWrapper.client);
+  const vinylId = new mongoose.Types.ObjectId().toHexString();
+  const vinyl = Vinyl.build({
+    id: vinylId,
     title: "concert",
     price: 20,
   });
-  await ticket.save();
+  await vinyl.save();
 
-  const data: TicketUpdatedEvent["data"] = {
-    id: ticket.id,
+  const data: VinylUpdatedEvent["data"] = {
+    id: vinyl.id,
     title: "new concert",
     price: 15,
     userId: new mongoose.Types.ObjectId().toHexString(),
-    version: ticket.version + 1,
+    version: vinyl.version + 1,
+    genre: Genre.Alternative,
+    description: "asdasd",
   };
 
   const message: EachMessagePayload = {
@@ -28,19 +30,19 @@ const setup = async () => {
     message: {
       offset: "1",
     },
-    topic: Topics.TicketCreated,
+    topic: Topics.VinylCreated,
     partition: 0,
   };
   return { consumer, data, message };
 };
 
-it("finds updates and saves a ticket", async () => {
+it("finds updates and saves a vinyl", async () => {
   const { consumer, data, message } = await setup();
   await consumer.onMessage(data, message);
 
-  const ticket = await Ticket.findOne({ _id: data.id });
-  expect(ticket).toBeDefined();
-  expect(ticket!.title).toEqual(data.title);
+  const vinyl = await Vinyl.findOne({ _id: data.id });
+  expect(vinyl).toBeDefined();
+  expect(vinyl!.title).toEqual(data.title);
 });
 
 it("rejects updates if version is out of order", async () => {

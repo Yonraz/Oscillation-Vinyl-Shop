@@ -3,28 +3,28 @@ import { Order } from "./Order";
 import { OrderStatus } from "@yonraztickets/common";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
-interface TicketAttributes {
+interface VinylAttributes {
   id: string;
   title: string;
   price: number;
 }
 
-export interface TicketDocument extends mongoose.Document {
+export interface VinylDocument extends mongoose.Document {
   title: string;
   price: number;
   version: number;
   isReserved(): Promise<boolean>;
 }
 
-interface TicketModel extends mongoose.Model<TicketDocument> {
-  build(attrs: TicketAttributes): TicketDocument;
+interface VinylModel extends mongoose.Model<VinylDocument> {
+  build(attrs: VinylAttributes): VinylDocument;
   findByEvent(event: {
     id: string;
     version: number;
-  }): Promise<TicketDocument | null>;
+  }): Promise<VinylDocument | null>;
 }
 
-const ticketSchema = new mongoose.Schema(
+const vinylSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -50,23 +50,23 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
-ticketSchema.statics.build = (attrs: TicketAttributes) => {
-  return new Ticket({
+vinylSchema.statics.build = (attrs: VinylAttributes) => {
+  return new Vinyl({
     _id: attrs.id,
     title: attrs.title,
     price: attrs.price,
   });
 };
-ticketSchema.statics.findByEvent = (event: { id: string; version: number }) => {
-  return Ticket.findOne({
+vinylSchema.statics.findByEvent = (event: { id: string; version: number }) => {
+  return Vinyl.findOne({
     _id: event.id,
     version: event.version - 1,
   });
 };
 
-ticketSchema.methods.isReserved = async function () {
+vinylSchema.methods.isReserved = async function () {
   const reserved = await Order.findOne({
-    ticket: this,
+    vinyl: this,
     status: {
       $in: [
         OrderStatus.Created,
@@ -78,11 +78,8 @@ ticketSchema.methods.isReserved = async function () {
   return !!reserved;
 };
 
-ticketSchema.set("versionKey", "version");
-ticketSchema.plugin(updateIfCurrentPlugin);
+vinylSchema.set("versionKey", "version");
+vinylSchema.plugin(updateIfCurrentPlugin);
 
-const Ticket = mongoose.model<TicketDocument, TicketModel>(
-  "Ticket",
-  ticketSchema
-);
-export { Ticket };
+const Vinyl = mongoose.model<VinylDocument, VinylModel>("Vinyl", vinylSchema);
+export { Vinyl };

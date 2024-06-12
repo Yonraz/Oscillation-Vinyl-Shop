@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { kafkaWrapper } from "../../../kafka-wrapper";
 import { Order } from "../../../models/Order";
-import { Ticket } from "../../../models/Ticket";
+import { Vinyl } from "../../../models/Vinyl";
 import { ExpirationCompleteConsumer } from "../ExpirationCompleteConsumer";
 import {
   ExpirationCompleteEvent,
@@ -13,17 +13,17 @@ import { EachMessagePayload } from "kafkajs";
 const setup = async () => {
   const consumer = new ExpirationCompleteConsumer(kafkaWrapper.client);
 
-  const ticket = Ticket.build({
+  const vinyl = Vinyl.build({
     id: new mongoose.Types.ObjectId().toHexString(),
     title: "pat metheny",
     price: 20,
   });
-  await ticket.save();
+  await vinyl.save();
   const order = Order.build({
     userId: "asdad",
     status: OrderStatus.Created,
     expiresAt: new Date(),
-    ticket,
+    vinyl,
   });
   await order.save();
 
@@ -40,7 +40,7 @@ const setup = async () => {
     partition: 0,
   };
 
-  return { consumer, data, message, order, ticket };
+  return { consumer, data, message, order, vinyl };
 };
 
 it("updates the order status to cancelled", async () => {
@@ -54,7 +54,7 @@ it("updates the order status to cancelled", async () => {
 });
 
 it("emits an OrderCancelled event", async () => {
-  const { consumer, data, message, order } = await setup();
+  const { consumer, data, message } = await setup();
 
   await consumer.onMessage(data, message);
 

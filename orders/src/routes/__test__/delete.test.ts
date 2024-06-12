@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "../../app";
-import { createTicket, makeOrder } from "./utils/helper_functions";
+import { createVinyl, makeOrder } from "./utils/helper_functions";
 import mongoose from "mongoose";
 import { OrderStatus } from "@yonraztickets/common";
 import { Order } from "../../models/Order";
@@ -18,8 +18,8 @@ it("returns a 404 for non existing order", async () => {
 it("returns a 401 if user does not own the order", async () => {
   const user1 = global.signup();
   const user2 = global.signup();
-  const ticket = await createTicket();
-  const orderResponse = await makeOrder(user1, ticket);
+  const vinyl = await createVinyl();
+  const orderResponse = await makeOrder(user1, vinyl);
   expect(orderResponse.status).toEqual(201);
   const { body: order } = orderResponse;
   await request(app)
@@ -30,9 +30,9 @@ it("returns a 401 if user does not own the order", async () => {
 });
 
 it("updates order status to cancelled", async () => {
-  const ticket = await createTicket();
+  const vinyl = await createVinyl();
   const user = global.signup();
-  const orderResponse = await makeOrder(user, ticket);
+  const orderResponse = await makeOrder(user, vinyl);
   expect(orderResponse.status).toEqual(201);
   const { body: order } = orderResponse;
   await request(app)
@@ -47,9 +47,9 @@ it("updates order status to cancelled", async () => {
 });
 
 it("emits a order cancelled event", async () => {
-  const ticket = await createTicket();
+  const vinyl = await createVinyl();
   const user = global.signup();
-  const orderResponse = await makeOrder(user, ticket);
+  const orderResponse = await makeOrder(user, vinyl);
   expect(orderResponse.status).toEqual(201);
   const { body: order } = orderResponse;
   await request(app)

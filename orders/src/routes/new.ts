@@ -7,7 +7,7 @@ import {
   OrderStatus,
   BadRequestError,
 } from "@yonraztickets/common";
-import { Ticket } from "../models/Ticket";
+import { Vinyl } from "../models/Vinyl";
 import { Order } from "../models/Order";
 import { OrderCreatedProducer } from "../events/producers/OrderCreatedProducer";
 import { kafkaWrapper } from "../kafka-wrapper";
@@ -19,19 +19,19 @@ const router = express.Router();
 router.post(
   "/api/orders",
   requireAuth,
-  [body("ticketId").not().isEmpty().withMessage("Ticket Id is required")],
+  [body("vinylId").not().isEmpty().withMessage("Vinyl Id is required")],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { ticketId } = req.body;
-    // find ticket
-    const ticket = await Ticket.findById(ticketId);
-    if (!ticket) {
+    const { vinylId } = req.body;
+    // find vinyl
+    const vinyl = await Vinyl.findById(vinylId);
+    if (!vinyl) {
       throw new NotFoundError();
     }
-    // make sure ticket isnt reserved
-    const isReserved = await ticket.isReserved();
+    // make sure vinyl isnt reserved
+    const isReserved = await vinyl.isReserved();
     if (isReserved) {
-      throw new BadRequestError("An order for this ticket already exists");
+      throw new BadRequestError("An order for this vinyl already exists");
     }
     // set 15 min expiration date
     const expiresAt = new Date();
@@ -41,7 +41,7 @@ router.post(
       userId: req.currentUser!.id,
       status: OrderStatus.Created,
       expiresAt,
-      ticket,
+      vinyl,
     });
     await order.save();
     // emit an order created event
@@ -52,9 +52,9 @@ router.post(
       status: order.status,
       expiresAt: order.expiresAt.toISOString(),
       userId: order.userId,
-      ticket: {
-        id: order.ticket.id,
-        price: order.ticket.price,
+      vinyl: {
+        id: order.vinyl.id,
+        price: order.vinyl.price,
       },
     });
 

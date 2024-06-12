@@ -24,7 +24,7 @@ const setup = async () => {
   const data: OrderCancelledEvent["data"] = {
     id: orderId,
     version: 1,
-    ticket: {
+    vinyl: {
       id: new mongoose.Types.ObjectId().toHexString(),
     },
   };

@@ -14,7 +14,7 @@ export class OrderCreatedConsumer extends BaseConsumer<OrderCreatedEvent> {
       id: data.id,
       userId: data.userId,
       version: data.version,
-      price: data.ticket.price,
+      price: data.vinyl.price,
       status: data.status,
     });
     await order.save();

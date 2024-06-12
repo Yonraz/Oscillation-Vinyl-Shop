@@ -1,22 +1,22 @@
 import request from "supertest";
 import { app } from "../../../app";
-import { Ticket, TicketDocument } from "../../../models/Ticket";
+import { Vinyl, VinylDocument } from "../../../models/Vinyl";
 import mongoose from "mongoose";
 
-export async function createTicket() {
-  const ticket = Ticket.build({
+export async function createVinyl() {
+  const vinyl = Vinyl.build({
     id: new mongoose.Types.ObjectId().toHexString(),
     title: "Shalom hanoch",
     price: 20,
   });
-  await ticket.save();
-  return ticket;
+  await vinyl.save();
+  return vinyl;
 }
 
-export async function makeOrder(cookie: string[], ticket: TicketDocument) {
+export async function makeOrder(cookie: string[], vinyl: VinylDocument) {
   const response = await request(app)
     .post("/api/orders")
     .set("Cookie", cookie)
-    .send({ ticketId: ticket.id });
+    .send({ vinylId: vinyl.id });
   return response;
 }

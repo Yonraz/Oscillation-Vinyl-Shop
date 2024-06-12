@@ -15,7 +15,7 @@ export class ExpirationCompleteConsumer extends BaseConsumer<ExpirationCompleteE
     data: ExpirationCompleteEvent["data"],
     message: EachMessagePayload
   ) {
-    const order = await Order.findById(data.orderId).populate("ticket");
+    const order = await Order.findById(data.orderId).populate("vinyl");
     if (!order) {
       throw new Error("Order not found");
     }
@@ -27,8 +27,8 @@ export class ExpirationCompleteConsumer extends BaseConsumer<ExpirationCompleteE
     await new OrderCancelledProducer(this.client).produce({
       id: order.id,
       version: order.version,
-      ticket: {
-        id: order.ticket.id,
+      vinyl: {
+        id: order.vinyl.id,
       },
     });
   }

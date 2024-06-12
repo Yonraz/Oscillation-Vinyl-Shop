@@ -2,8 +2,8 @@ import "express-async-errors";
 import mongoose from "mongoose";
 import { app } from "./app";
 import { kafkaWrapper } from "./kafka-wrapper";
-import { TicketCreatedConsumer } from "./events/Consumers/TicketCreatedConsumer";
-import { TicketUpdatedConsumer } from "./events/Consumers/TicketUpdatedConsumer";
+import { VinylCreatedConsumer } from "./events/Consumers/VinylCreatedConsumer";
+import { VinylUpdatedConsumer } from "./events/Consumers/VinylUpdatedConsumer";
 import { Topics } from "@yonraztickets/common";
 import { PaymentCreatedConsumer } from "./events/Consumers/PaymentCreatedConsumer";
 import { ExpirationCompleteConsumer } from "./events/Consumers/ExpirationCompleteConsumer";
@@ -26,14 +26,10 @@ const startup = async () => {
       process.env.KAFKA_BROKER!,
     ]);
 
-    const ticketCreatedConsumer = new TicketCreatedConsumer(
-      kafkaWrapper.client
-    );
-    await ticketCreatedConsumer.consume();
-    const ticketUpdatedConsumer = new TicketUpdatedConsumer(
-      kafkaWrapper.client
-    );
-    await ticketUpdatedConsumer.consume();
+    const vinylCreatedConsumer = new VinylCreatedConsumer(kafkaWrapper.client);
+    await vinylCreatedConsumer.consume();
+    const vinylUpdatedConsumer = new VinylUpdatedConsumer(kafkaWrapper.client);
+    await vinylUpdatedConsumer.consume();
     const expirationCompleteConsumer = new ExpirationCompleteConsumer(
       kafkaWrapper.client
     );

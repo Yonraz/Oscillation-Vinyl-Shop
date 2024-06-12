@@ -19,7 +19,7 @@ it("returns a 404 when purchasing an order that does not exist", async () => {
     .expect(404);
 });
 
-it("doesnt allow purchasing a ticket that is already reserved", async () => {
+it("doesnt allow purchasing a vinyl that is already reserved", async () => {
   const order = Order.build({
     id: new mongoose.Types.ObjectId().toHexString(),
     userId: new mongoose.Types.ObjectId().toHexString(),

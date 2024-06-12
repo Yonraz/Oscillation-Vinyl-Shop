@@ -17,7 +17,7 @@ router.delete(
   "/api/orders/:orderId",
   requireAuth,
   async (req: Request, res: Response) => {
-    const order = await Order.findById(req.params.orderId).populate("ticket");
+    const order = await Order.findById(req.params.orderId).populate("vinyl");
     if (!order) {
       throw new NotFoundError();
     }
@@ -31,8 +31,8 @@ router.delete(
     producer.produce({
       id: order.id,
       version: order.version,
-      ticket: {
-        id: order.ticket.id,
+      vinyl: {
+        id: order.vinyl.id,
       },
     });
 
