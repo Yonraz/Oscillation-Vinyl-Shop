@@ -26,8 +26,8 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
-    - image: yonrazticketing/tickets # us.gcr.io/myticketing-dev-420512/tickets
-      context: tickets
+    - image: yonrazticketing/items # us.gcr.io/myticketing-dev-420512/items
+      context: items
       sync:
         manual:
           - src: src/**/*.ts

@@ -1,42 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tickets-depl
+  name: items-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tickets
+      app: items
   template:
     metadata:
       labels:
-        app: tickets
+        app: items
     spec:
       containers:
-        - name: tickets
-          image: yonrazticketing/tickets # us.gcr.io/myticketing-dev-420512/tickets
+        - name: items
+          image: yonrazticketing/items # us.gcr.io/myticketing-dev-420512/items
           env:
             - name: MONGO_URI
-              value: "mongodb://tickets-mongo-srv:27017/tickets"
+              value: "mongodb://items-mongo-srv:27017/items"
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
             - name: KAFKA_CLIENT_ID
-              value: "tickets"
+              value: "items"
             - name: KAFKA_BROKER
               value: "kafka-srv:9092"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: tickets-srv
+  name: items-srv
 spec:
   selector:
-    app: tickets
+    app: items
   ports:
-    - name: tickets
+    - name: items
       protocol: TCP
       port: 3000
       targetPort: 3000
