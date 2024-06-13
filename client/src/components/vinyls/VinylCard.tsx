@@ -1,7 +1,8 @@
 import { Vinyl } from "@/types/vinyl";
 import Image from "next/image";
 
-export default function VinylCard(vinyl: Vinyl) {
+export default function VinylCard(props: { vinyl: Vinyl }) {
+  const { vinyl } = props;
   return (
     <div key={vinyl.id}>
       <h2>{vinyl.title}</h2>

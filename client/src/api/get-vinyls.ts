@@ -1,6 +1,5 @@
 "use server";
 
-import { Vinyl } from "@/types/vinyl";
 import { buildClient } from "./build-client";
 
 export const getVinyls = async () => {

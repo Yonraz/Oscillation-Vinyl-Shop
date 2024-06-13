@@ -1,4 +1,5 @@
 "use client";
+import ShowVinyls from "@/components/vinyls/ShowVinyls";
 import { useUser } from "@/context/user-context";
 
 const Home = () => {

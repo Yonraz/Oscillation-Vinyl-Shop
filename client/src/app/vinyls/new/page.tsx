@@ -1,3 +1,4 @@
+"use client";
 import { Genre } from "@/types/genre";
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -13,7 +14,6 @@ const formSchema = z.object({
   price: z.number().min(0.01, "Price must be greater than 0"),
   genre: z.nativeEnum(Genre),
   description: z.string(),
-  image: z.string(),
 });
 type FormSchemaType = z.infer<typeof formSchema>;
 const NewVinylForm = () => {
@@ -129,7 +129,7 @@ const NewVinylForm = () => {
       </div>
       <div>
         <label>Image:</label>
-        <input type="file" {...register("image", { required: true })} />
+        <input type="file" />
         {errors.image && <span>This field is required</span>}
       </div>
       <button type="submit">Add Vinyl</button>

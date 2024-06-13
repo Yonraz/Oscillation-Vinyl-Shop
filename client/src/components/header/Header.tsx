@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useUser } from "@/context/user-context";
 import Link from "next/link";
 
@@ -12,7 +12,12 @@ export default function Header() {
         </Link>
         <div className="absolute right-0 mx-6">
           {currentUser ? (
-            <Link href="/auth/signout">Sign Out</Link>
+            <>
+              <Link className="text-xs text-blue-700 mx-3" href="/vinyls/new">
+                Sell Tickets
+              </Link>
+              <Link href="/auth/signout">Sign Out</Link>
+            </>
           ) : (
             <>
               <Link className="text-xs text-blue-700 mx-3" href="/auth/signup">
