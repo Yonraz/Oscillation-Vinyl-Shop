@@ -6,6 +6,7 @@ import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/user-context";
 import { CurrentUser } from "@/types/currentUser";
+import ErrorList from "@/components/errors/ErrorList";
 
 interface FormFields {
   email: string;
@@ -115,18 +116,7 @@ export default function Signin() {
               Do not have an account?
             </a>
           </div>
-          {requestErrors && (
-            <div className="w-full">
-              {requestErrors.map((err, index) => (
-                <li
-                  key={index}
-                  className="text-red-700 text-xs font-semibold italic"
-                >
-                  {err.message}
-                </li>
-              ))}
-            </div>
-          )}
+          {requestErrors && <ErrorList errors={requestErrors} />}
         </form>
       </div>
     </div>

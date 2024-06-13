@@ -31,7 +31,7 @@ const NewVinylForm = () => {
       router.push("/auth/signin");
     }
   }, []);
-  const imageFile = watch("image");
+  //   const imageFile = watch("image");
   const { sendRequest } = useRequest();
 
   const handleImageUpload = async (file: File) => {
@@ -130,7 +130,6 @@ const NewVinylForm = () => {
       <div>
         <label>Image:</label>
         <input type="file" />
-        {errors.image && <span>This field is required</span>}
       </div>
       <button type="submit">Add Vinyl</button>
     </form>

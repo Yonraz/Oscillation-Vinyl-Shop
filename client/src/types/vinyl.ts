@@ -6,5 +6,5 @@ export interface Vinyl {
   price: number;
   genre: Genre;
   description: string;
-  image: string;
+  imageUrl: string;
 }

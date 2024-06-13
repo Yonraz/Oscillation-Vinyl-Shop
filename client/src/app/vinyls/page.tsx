@@ -1,22 +1,21 @@
 import { getVinyls } from "@/api/get-vinyls";
 import { Vinyl } from "@/types/vinyl";
+import { vinyls } from "@/app/dev/data/vinyls";
+import VinylCard from "@/components/vinyls/VinylCard";
 
 const Vinyls = async () => {
-  const tickets: Vinyl[] = await getVinyls();
+  // const vinyls = await getVinyls();
   return (
     <div>
-      <h1>Tickets</h1>
-      {tickets && (
-        <ul>
-          {tickets.map((ticket) => (
-            <li key={ticket.id}>
-              <h2>{ticket.title}</h2>
-              <p>{ticket.price}</p>
-            </li>
+      <h1>Available Records</h1>
+      {vinyls && (
+        <div className=" grid grid-cols-5 ">
+          {vinyls.map((vinyl) => (
+            <VinylCard vinyl={vinyl} key={vinyl.id} />
           ))}
-        </ul>
+        </div>
       )}
-      {!tickets && <p>No tickets found</p>}
+      {!vinyls && <p>No vinyls found</p>}
     </div>
   );
 };
