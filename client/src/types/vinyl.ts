@@ -7,4 +7,5 @@ export interface Vinyl {
   genre: Genre;
   description: string;
   imageUrl: string;
+  orderId?: string;
 }

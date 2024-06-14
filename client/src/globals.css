@@ -33,3 +33,40 @@ body {
     text-wrap: balance;
   }
 }
+
+.genre-button {
+  @apply rounded-md bg-none px-2 py-1 text-sm
+  text-black;
+}
+
+.nav {
+  @apply flex w-full items-start text-gray-800 p-6 border-b-2 border-gray-400;
+}
+
+.dot {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin-right: 0.25rem;
+}
+
+.genre-nav-item {
+  @apply relative flex max-h-fit  items-center justify-start w-32 px-1 pt-4 mx-0;
+}
+.genre-nav {
+  @apply absolute px-6 right-0 top-0 flex flex-col-reverse rotate-90 items-start justify-start;
+}
+
+.nav-item {
+  @apply relative flex max-h-fit  items-center justify-start px-2 mx-0;
+}
+
+.ratio {
+  font-family: ratio, sans-serif;
+  font-style: normal;
+  font-weight: 200;
+}
+
+.chevron {
+  @apply bg-gray-700 z-10 bg-opacity-25 rounded-full hover:cursor-pointer hover:bg-opacity-15 duration-100 transition-all;
+}
