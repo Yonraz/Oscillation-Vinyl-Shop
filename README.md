@@ -1,8 +1,8 @@
-# Ticketing
+# Oscillation Vinyls
 
 ## Description
 
-A fullstack web application for buying and selling tickets. Users can view tickets for sale, sign in to place orders and make payments, or sell their own tickets. This project is built on an event-based architecture and utilizes server-side rendering. It aims to provide a comprehensive learning experience in microservices, Docker, Kubernetes, Kafka, and Next.js.
+A fullstack web application for buying and selling vinyl records. Users can view records for sale, sign in to place orders and make payments, or sell their own vinyls. This project is built on an event-based architecture and utilizes server-side rendering. It aims to provide a comprehensive learning experience in microservices, Docker, Kubernetes, Kafka, and Next.js.
 
 ## Technologies Used
 
@@ -15,16 +15,26 @@ A fullstack web application for buying and selling tickets. Users can view ticke
 * **Styling:** **TailwindCSS** is used as the frontend styling framework.
 * **Testing:** Comprehensive testing suites are implemented using **Jest**.
 
-## Current Working Features
+## Features
 
 * **Authentication and Authorization**
     - Utilizes JWT for user authentication.
     - Sign-in, sign-up, and sign-out pages on the client communicate with the auth service.
 
-* **Tickets**
-    - Users can view available tickets.
-    - Authenticated users can add and update their own tickets.
+* **Records**
+    - Users can view available records.
+    - Authenticated users can add and update their own records.
     - Authenticated users can view and place their own orders.
+    - When uploading a record for sale, images are stored on an AWS S3 bucket.
+
+* **Orders**
+    - Orders can be made in a 15 minute time frame during which the selected vinyl is reserved and cannot be purchased by other users
+    - Users can view their orders and order statuses.
+
+* **Payments**
+    - Used stripe for payment processing.
+    - This is a showcase project, payment functionality is not available.
+
 
 ## Event Architecture Overview
 
@@ -34,5 +44,6 @@ Communication between microservices is implemented using asynchronous events wit
 
 Each service has its own database and area of responsibility. It emits an event whenever an action occurs that other services need to be aware of, and it listens for relevant events that may occur in other services.
 
-For example, when a ticket is created by the Tickets service, a 'ticket created' event is emitted through Kafka along with the ticket data. Subscribers to this topic, such as the Orders service, receive this event and save the ticket data to their own databases. This introduces some data duplication among services but also eliminates direct dependencies between microservices, promoting a more decoupled and scalable architecture.
+For example, when an item is created by the Items service, a 'vinyl created' event is emitted through Kafka along with the vinyl data. Subscribers to this topic, such as the Orders service, receive this event and save the ticket data to their own databases. This introduces some data duplication among services but also eliminates direct dependencies between microservices, promoting a more decoupled and scalable architecture.
 
+To make sure events are read properly, to avoid versioning errors for example, a manual commit offset is being done by each consumer, so that if an error occurs kafka will not commit the offset of the current event and try later.
