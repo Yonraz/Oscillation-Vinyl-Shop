@@ -5,24 +5,32 @@ import LoadingSpinner from "@/components/loadingSpinner/LoadingSpinner";
 import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/user-context";
-import { CurrentUser } from "@/types/currentUser";
+import { z } from "zod";
 import ErrorList from "@/components/errors/ErrorList";
+import { zodResolver } from "@hookform/resolvers/zod";
+import FormInput from "@/components/ui/FormInput";
+import Link from "next/link";
+import Button from "@/components/ui/Button";
 
-interface FormFields {
-  email: string;
-  password: string;
-}
+const formSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z
+    .string()
+    .min(6, "Password must be between 6 and 20 characters")
+    .max(20, "Password must be between 6 and 20 characters"),
+});
+type FormSchemaType = z.infer<typeof formSchema>;
 
 export default function Signin() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FormFields>();
+  } = useForm<FormSchemaType>({ resolver: zodResolver(formSchema) });
   const { requestErrors, sendRequest, isLoading } = useRequest();
   const router = useRouter();
   const { setCurrentUser } = useUser();
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     try {
       if (errors.email || errors.password) return;
       const { email, password } = data;
@@ -46,26 +54,19 @@ export default function Signin() {
   };
 
   return (
-    <div className="flex justify-center items-center w-full h-full">
+    <div className="flex justify-center items-start w-full min-h-screen overflow-hidden bg-neutral-800">
       {(isSubmitting || isLoading) && <LoadingSpinner />}
-      <div className="max-w-sm w-full max-h-sm">
+      <div className="max-w-lg max-h-lg mt-8">
         <form
-          className="bg-white shadow-md rounded px-8 pt-6 pb-10 mb-4 "
+          className="bg-white shadow-md rounded-lg px-8 pt-6 pb-10 mb-4 "
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Email Address
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^\S+@\S+\.\S+$/,
-                  message: "Invalid email address",
-                },
-              })}
+            <FormInput
+              validation={formSchema.shape.email}
+              register={register}
+              label="Email Address"
+              name="email"
               type="text"
               placeholder="Email"
             />
@@ -76,24 +77,13 @@ export default function Signin() {
             )}
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 4,
-                  message: "Password must have between 4 and 20 characters",
-                },
-                maxLength: {
-                  value: 20,
-                  message: "Password must have between 4 and 20 characters",
-                },
-              })}
+            <FormInput
+              name="password"
+              label="Password"
+              register={register}
+              validation={formSchema.shape.password}
               type="password"
-              placeholder="*********"
+              placeholder="*******"
             />
             {errors.password && (
               <p className="text-red-500 text-xs italic">
@@ -101,21 +91,21 @@ export default function Signin() {
               </p>
             )}
           </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          <div className="mb-2">
+            <Button
+              className="button-secondary"
               type="submit"
               disabled={isSubmitting}
             >
               Sign In
-            </button>
-            <a
-              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-              onClick={() => router.push("/auth/signup")}
-            >
-              Do not have an account?
-            </a>
+            </Button>
           </div>
+          <Link
+            className="font-bold text-sm text-neutral-500 hover:text-neutral-800"
+            href={"/auth/signup"}
+          >
+            Don't have an account?
+          </Link>
           {requestErrors && <ErrorList errors={requestErrors} />}
         </form>
       </div>

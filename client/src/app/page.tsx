@@ -8,19 +8,14 @@ import VinylCard from "@/components/vinyls/VinylCard";
 import Image from "next/image";
 import { Vinyl } from "@/types/vinyl";
 import { Genre } from "@/types/genre";
+import SlidingCarousel from "@/components/slidingCarousel/SlidingCarousel";
 
 const Home = () => {
   const { currentUser } = useUser();
   return (
     <>
       <Banner />
-      <Carousel>
-        {Object.keys(Genre).map((genre) => (
-          <div key={genre}>
-            <h2>{genre}</h2>
-          </div>
-        ))}
-      </Carousel>
+      <SlidingCarousel/>
     </>
   );
 };

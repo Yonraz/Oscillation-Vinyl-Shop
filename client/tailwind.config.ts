@@ -20,6 +20,9 @@ const config: Config = {
       fontFamily: {
         ratio: ['ratio', 'sans-serif'],
       },
+      screens: {
+        'xs': {'max': '639px'},
+      }
     },
   },
   plugins: [],
