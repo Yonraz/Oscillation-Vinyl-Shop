@@ -1,17 +1,15 @@
-"use client";
-
 import AWS from "aws-sdk";
 import { PutObjectRequest } from "aws-sdk/clients/s3";
 import { v4 as uuidv4 } from "uuid";
 
-const S3_BUCKET = process.env.VITE_S3_BUCKET;
-const REGION = process.env.VITE_S3_REGION;
+const S3_BUCKET = process.env.NEXT_PUBLIC_S3_BUCKET;
+const REGION = process.env.NEXT_PUBLIC_S3_REGION;
 
 console.log(S3_BUCKET, REGION);
 
 AWS.config.update({
-  accessKeyId: process.env.VITE_S3_API_KEY,
-  secretAccessKey: process.env.VITE_S3_API_SECRET,
+  accessKeyId: process.env.NEXT_PUBLIC_S3_API_KEY,
+  secretAccessKey: process.env.NEXT_PUBLIC_S3_API_SECRET,
 });
 const s3 = new AWS.S3({
   params: { Bucket: S3_BUCKET },

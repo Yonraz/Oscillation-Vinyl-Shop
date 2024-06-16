@@ -5,9 +5,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "@/context/user-context";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { uploadFile } from "@/utils/aws";
 
 const formSchema = z.object({
   title: z.string(),
@@ -31,29 +32,13 @@ const NewVinylForm = () => {
       router.push("/auth/signin");
     }
   }, []);
-  //   const imageFile = watch("image");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const { sendRequest } = useRequest();
 
   const handleImageUpload = async (file: File) => {
     try {
-      const response = await axios.get("/s3-presigned-url", {
-        params: {
-          fileName: file.name,
-          fileType: file.type,
-        },
-      });
-
-      const { url, fields } = response.data;
-      const formData = new FormData();
-
-      for (const key in fields) {
-        formData.append(key, fields[key]);
-      }
-
-      formData.append("file", file);
-
-      await axios.post(url, formData);
-      return `${url}/${file.name}`;
+      const url = await uploadFile(file);
+      return url;
     } catch (error) {
       console.error("Error uploading file: ", error);
       return null;
@@ -61,10 +46,11 @@ const NewVinylForm = () => {
   };
 
   const onSubmit = async (data: FormSchemaType) => {
-    // const imageUrl = await handleImageUpload(data.image[0]);
-    //TODO: upload to s3
-    const imageUrl = "placeholder";
-
+    if (!imageFile) {
+      alert("Please select an image");
+      return;
+    }
+    const imageUrl = await handleImageUpload(imageFile);
     if (!imageUrl) {
       alert("Image upload failed. Please try again.");
       return;
@@ -92,6 +78,13 @@ const NewVinylForm = () => {
       alert("Error submitting form. Please try again.");
     }
   };
+
+  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setImageFile(files[0]);
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -129,7 +122,7 @@ const NewVinylForm = () => {
       </div>
       <div>
         <label>Image:</label>
-        <input type="file" />
+        <input type="file" onChange={handleImageChange} />
       </div>
       <button type="submit">Add Vinyl</button>
     </form>
