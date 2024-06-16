@@ -7,6 +7,7 @@ import StripeCheckout from "react-stripe-checkout";
 import { useUser } from "@/context/user-context";
 import useRequest from "@/hooks/useRequest";
 import ErrorList from "../errors/ErrorList";
+import { stripePublishableKey } from "@/config/stripe-publishable-key";
 
 export default function NewOrder(props: { order: Order }) {
   const { currentUser } = useUser();
@@ -63,7 +64,7 @@ export default function NewOrder(props: { order: Order }) {
           handleToken(id);
         }}
         email={currentUser!.email!}
-        stripeKey={process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
+        stripeKey={stripePublishableKey}
       />
       {requestErrors && <ErrorList errors={requestErrors} />}
     </div>

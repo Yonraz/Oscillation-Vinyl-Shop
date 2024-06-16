@@ -21,3 +21,4 @@ const Orders = async () => {
     </div>
   );
 };
+export default Orders;
