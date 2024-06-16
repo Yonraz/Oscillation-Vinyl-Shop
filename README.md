@@ -2,7 +2,7 @@
 
 ## Description
 
-A fullstack web application for buying and selling vinyl records. Users can view records for sale, sign in to place orders and make payments, or sell their own vinyls. This project is built on an event-based architecture and utilizes server-side rendering. It aims to provide a comprehensive learning experience in microservices, Docker, Kubernetes, Kafka, and Next.js.
+A fullstack web application for buying and selling vinyl records. Users can view records for sale, sign in to place orders and make payments, or sell their own vinyls. This project is built on an event-based architecture and utilizes server-side rendering. My goal in this project is to get a solid understanding of microservices, software design and architecture principles, Docker, Kubernetes and Kafka.
 
 ## Technologies Used
 
