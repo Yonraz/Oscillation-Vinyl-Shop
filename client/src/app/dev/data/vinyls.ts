@@ -97,7 +97,7 @@ export const vinyls: Vinyl[] = [
     imageUrl:
       "https://i.discogs.com/Bng85Q1pBPWZmqsBJt9EGHOe89Y_4EBfpU6IuDPaI9A/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI5MjMx/NTctMTQ1Mjc3MzQ1/MS00MzMxLmpwZWc.jpeg",
     description:
-      "Herbie Hancock's classic album that defined jazz-funk with its iconic cover art and groundbreaking music. Utilizing a minimalist approach to jazz-funk, the album is a stark contrast to Hancock's previous work, which was more orchestral in nature. The album's title track, 'Chameleon,' is a prime example of this new direction, with its repetitive bassline and synthesizer-driven melody. The album also features the hit 'Watermelon' and the funky 'Sly,' which showcases Hancock's virtuosic keyboard skills. 'Head Hunters' is a landmark album in the history of jazz and remains a classic of the genre to this day.",
+      "Herbie Hancock's classic album that defined jazz-funk with its iconic cover art and groundbreaking music. Utilizing a minimalist approach to jazz-funk, the album is a stark contrast to Hancock's previous work, which was more orchestral in nature. The album's title track, The album also features the hit 'Watermelon' and the funky 'Sly,' which showcases Hancock's virtuosic keyboard skills. 'Head Hunters' is a landmark album in the history of jazz and remains a classic of the genre to this day.",
   },
   {
     id: 11,
@@ -205,6 +205,6 @@ export const vinyls: Vinyl[] = [
     imageUrl:
       "https://i.discogs.com/qh12cY8VmD8mISGEPrHHao4kq4wFWAo2yf99g9irNHM/rs:fit/g:sm/q:90/h:500/w:500/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTU3Nzkw/ODEtMTQ1OTM1MTI2/OS05MjQzLmpwZWc.jpeg",
     description:
-      "George Gershwin's iconic composition performed by the New York Philharmonic Orchestra. The piece is a fusion of classical music and jazz, and is considered one of the most important works of American music. The piece was composed in 1924 and premiered in New York City in 1924. It has since become a staple of the classical music repertoire and is widely regarded as one of the greatest works of the 20th century. The piece is known for its distinctive opening clarinet glissando, which has become one of the most recognizable motifs in classical music. The piece is a landmark in American music and has been performed by countless orchestras around the world.",
+      "George Gershwin's iconic composition performed by the New York Philharmonic Orchestra. The piece is a fusion of classical music and jazz, and is considered one of the most important works of American music. The piece was composed in 1924 and premiered in New York City in 1924. It has since become a staple of the classical music repertoire and is widely regarded as one of the greatest works of the 20th century.",
   },
 ];

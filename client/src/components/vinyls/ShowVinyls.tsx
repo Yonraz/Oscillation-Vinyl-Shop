@@ -22,7 +22,7 @@ export default function ShowVinyls(props: {
         className="mx-2"
         onChange={(e) => router.push(`/vinyls?genre=${e.currentTarget.value}`)}
       >
-        <option value="">{genre ? `${genre}` : "All Genres"}</option>
+        <option value="All Genres">All</option>
         {Object.keys(Genre).map((key) => (
           <option key={key} value={key}>
             {/* @ts-ignore */}
