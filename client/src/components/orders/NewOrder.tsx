@@ -8,6 +8,7 @@ import { useUser } from "@/context/user-context";
 import useRequest from "@/hooks/useRequest";
 import ErrorList from "../errors/ErrorList";
 import { stripePublishableKey } from "@/config/stripe-publishable-key";
+import Seperator from "../ui/Seperator";
 
 export default function NewOrder(props: { order: Order }) {
   const { currentUser } = useUser();
@@ -55,18 +56,36 @@ export default function NewOrder(props: { order: Order }) {
 
   const { order } = props;
   return (
-    <div>
-      <p>You have {seconds} seconds to complete the order.</p>
-      <OrderDetails order={order} />
-      <StripeCheckout
-        amount={order.vinyl.price * 100}
-        token={({ id }) => {
-          handleToken(id);
-        }}
-        email={currentUser!.email!}
-        stripeKey={stripePublishableKey}
-      />
-      {requestErrors && <ErrorList errors={requestErrors} />}
+    <div className="flex justify-center">
+      <div className="flex flex-col m-6">
+        {seconds > 60 ? (
+          <p className="text-white">
+            You have{" "}
+            <span className="text-green-400">{Math.ceil(seconds / 60)}</span>{" "}
+            minutes to complete the order.
+          </p>
+        ) : (
+          <p>
+            You have <span className="text-red-400">{seconds}</span> seconds to
+            complete the order.
+          </p>
+        )}
+        <div className="bg-slate-100 rounded-md px-2 py-1">
+          <OrderDetails order={order} />
+          <Seperator />
+          <div className="mt-4">
+            <StripeCheckout
+              amount={order.vinyl.price * 100}
+              token={({ id }) => {
+                handleToken(id);
+              }}
+              email={currentUser!.email!}
+              stripeKey={stripePublishableKey}
+            />
+          </div>
+          {requestErrors && <ErrorList errors={requestErrors} />}
+        </div>
+      </div>
     </div>
   );
 }

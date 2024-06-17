@@ -5,8 +5,7 @@ import VinylDetails from "@/components/vinyls/VinylDetails";
 import { vinyls } from "@/app/dev/data/vinyls";
 
 const Vinyl = async ({ params }: { params: { vinylId: string } }) => {
-  // const vinyl: VinylType = await getVinylById(params.vinylId);
-  const vinyl = vinyls.find((vinyl) => vinyl.id === parseInt(params.vinylId));
+  const vinyl: VinylType = await getVinylById(params.vinylId);
   return (
     <div>
       {vinyl && <VinylDetails vinyl={vinyl} />}

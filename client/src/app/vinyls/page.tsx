@@ -13,11 +13,12 @@ const Vinyls = async ({
   searchParams: { [key: string]: string | undefined };
 }) => {
   let { genre } = searchParams;
+  const vinyls: Vinyl[] = await getVinyls();
+  console.log(vinyls)
   let vinylsToShow: Vinyl[] = vinyls;
   if (genre && genre in Genre) {
     vinylsToShow = vinyls.filter((vinyl) => vinyl.genre === genre);
   } else genre = undefined;
-  // const vinyls = await getVinyls();
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
