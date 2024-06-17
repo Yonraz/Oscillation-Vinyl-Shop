@@ -1,21 +1,29 @@
 import { getVinyls } from "@/api/get-vinyls";
 import { Vinyl } from "@/types/vinyl";
 import VinylCard from "@/components/vinyls/VinylCard";
+import { vinyls } from "@/app/dev/data/vinyls";
+import { Genre } from "@/types/genre";
+import ShowVinyls from "@/components/vinyls/ShowVinyls";
+import { Suspense } from "react";
+import LoadingSpinner from "@/components/loadingSpinner/LoadingSpinner";
 
-const Vinyls = async () => {
-  const vinyls = await getVinyls();
+const Vinyls = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  let { genre } = searchParams;
+  let vinylsToShow: Vinyl[] = vinyls;
+  if (genre && genre in Genre) {
+    vinylsToShow = vinyls.filter((vinyl) => vinyl.genre === genre);
+  } else genre = undefined;
+  // const vinyls = await getVinyls();
+
   return (
-    <div>
-      <h1>Available Records</h1>
-      {vinyls && (
-        <div className=" grid grid-cols-5 ">
-          {vinyls.map((vinyl: Vinyl) => (
-            <VinylCard vinyl={vinyl} key={vinyl.id} />
-          ))}
-        </div>
-      )}
-      {!vinyls && <p>No vinyls found</p>}
-    </div>
+    <Suspense fallback={<LoadingSpinner />}>
+      <ShowVinyls vinyls={vinylsToShow} genre={genre as Genre} />
+    </Suspense>
   );
 };
+
 export default Vinyls;

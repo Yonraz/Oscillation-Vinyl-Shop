@@ -1,0 +1,16 @@
+.rotating {
+  animation: rotateZ 3s infinite ease-out;
+}
+
+@keyframes rotateZ {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+.non-rotating {
+  animation: none;
+}

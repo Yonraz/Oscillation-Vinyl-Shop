@@ -9,7 +9,7 @@ import { CurrentUser } from "@/types/currentUser";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Ticketing",
+  title: "Oscillation Vinyl Records",
 };
 
 const AsyncLayout: React.FC<{

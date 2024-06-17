@@ -18,9 +18,9 @@ export default function Header() {
   return (
     <>
       <nav className="nav">
-        <Image src="/images/logo.png" alt="logo" width={30} height={30} />
-        <Link className="font-bold text-xl xs:hidden" href="/">
-          OSCILLATION
+        <Link className="flex" href="/">
+          <Image src="/images/logo.png" alt="logo" width={30} height={30} />
+          <p className="font-bold text-xl xs:hidden">OSCILLATION</p>
         </Link>
         <div className="flex absolute right-0">
           {isMobile ? (

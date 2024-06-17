@@ -78,3 +78,7 @@ body {
 .button-secondary {
   @apply bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none  focus:shadow-md;
 }
+
+.button-file {
+  @apply bg-slate-500 hover:bg-slate-600 text-white font-bold text-xs py-1 px-2 rounded focus:outline-none  focus:shadow-md hover:cursor-pointer;
+}

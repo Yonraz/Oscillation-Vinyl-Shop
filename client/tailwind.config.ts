@@ -18,11 +18,14 @@ const config: Config = {
         "custom-yellow": "#FAF58C",
       },
       fontFamily: {
-        ratio: ['ratio', 'sans-serif'],
+        ratio: ["ratio", "sans-serif"],
       },
       screens: {
-        'xs': {'max': '639px'},
-      }
+        xs: { max: "639px" },
+      },
+      boxShadow: {
+        custom: "2px 2px 5px 0 rgba(0, 0, 0, 0.1)",
+      },
     },
   },
   plugins: [],
