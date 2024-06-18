@@ -14,7 +14,7 @@ const Vinyls = async ({
 }) => {
   let { genre } = searchParams;
   const vinyls: Vinyl[] = await getVinyls();
-  
+
   let vinylsToShow: Vinyl[] = vinyls;
   if (genre && genre in Genre) {
     vinylsToShow = vinyls.filter((vinyl) => vinyl.genre === genre);
@@ -22,7 +22,11 @@ const Vinyls = async ({
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <ShowVinyls vinyls={vinylsToShow} genre={genre as Genre} />
+      {vinylsToShow ? (
+        <ShowVinyls vinyls={vinylsToShow} genre={genre as Genre} />
+      ) : (
+        <p>No vinyls found</p>
+      )}
     </Suspense>
   );
 };

@@ -32,15 +32,17 @@ export default function NewOrder(props: { order: Order }) {
 
   if (seconds <= 0) {
     return (
-      <>
-        <div>Order expired.</div>
-        <Button
-          className="button-secondary"
-          onClick={() => router.push("/vinyls")}
-        >
-          Take me back!
-        </Button>
-      </>
+      <div className="flex justify-center items-center">
+        <div className="bg-white rounded-lg py-6 px-4">
+          <div>Order expired.</div>
+          <Button
+            className="button-secondary"
+            onClick={() => router.push("/vinyls")}
+          >
+            Take me back!
+          </Button>
+        </div>
+      </div>
     );
   }
 
@@ -64,7 +66,7 @@ export default function NewOrder(props: { order: Order }) {
           <OrderDetails order={order} />
           <Seperator />
           <div className="mt-4">
-            <EmbeddedCheckoutButton order={order} />
+            <EmbeddedCheckoutButton order={order} isExpired={seconds <= 0} />
           </div>
           {requestErrors && <ErrorList errors={requestErrors} />}
         </div>
