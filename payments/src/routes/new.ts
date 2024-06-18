@@ -21,7 +21,7 @@ router.post(
   [body("token").not().isEmpty(), body("orderId").not().isEmpty()],
   async (req: Request, res: Response) => {
     const { token, orderId } = req.body;
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate("vinyl");
     if (!order) {
       throw new NotFoundError();
     }
@@ -32,10 +32,25 @@ router.post(
       throw new BadRequestError("Order is cancelled");
     }
 
-    const paymentData = await stripe.charges.create({
-      currency: "usd",
-      amount: order.price * 100,
-      source: token,
+    // const paymentData = await stripe.charges.create({
+    //   currency: "usd",
+    //   amount: order.price * 100,
+    //   source: token,
+    // });
+    const paymentData = await stripe.checkout.sessions.create({
+      ui_mode: "embedded",
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            unit_amount: order.price * 100,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      return_url: `${req.headers.origin}/return?session_id={CHECKOUT_SESSION_ID}`,
     });
 
     const payment = Payment.build({
@@ -51,7 +66,9 @@ router.post(
       stripeId: payment.stripeId,
     });
 
-    res.status(201).send({ success: true });
+    res
+      .status(201)
+      .send({ id: payment.stripeId, client_secret: paymentData.client_secret });
   }
 );
 
