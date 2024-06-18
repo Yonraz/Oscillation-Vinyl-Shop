@@ -28,6 +28,11 @@ spec:
                 secretKeyRef:
                   name: stripe-secret
                   key: STRIPE_KEY
+            - name: STRIPE_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-webhook-secret
+                  key: webhook-secret
             - name: KAFKA_CLIENT_ID
               value: "payments"
             - name: KAFKA_BROKER

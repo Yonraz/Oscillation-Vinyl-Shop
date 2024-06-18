@@ -13,7 +13,7 @@ import EmbeddedCheckoutButton from "../payment/EmbeddedCheckoutButton";
 export default function NewOrder(props: { order: Order }) {
   const { currentUser } = useUser();
   const router = useRouter();
-  // if (!currentUser) router.push("/login");
+  if (!currentUser) router.push("/login");
   const msLeft =
     new Date(props.order.expiresAt).getTime() - new Date().getTime();
   const [seconds, setSeconds] = useState(Math.round(msLeft / 1000));

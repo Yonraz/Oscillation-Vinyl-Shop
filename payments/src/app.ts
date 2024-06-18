@@ -8,6 +8,7 @@ import {
   currentUser,
 } from "@yonraztickets/common";
 import { createChargeRouter } from "./routes/new";
+import { stripeWebhookRouter } from "./routes/pay";
 
 const app = express();
 app.set("trust proxy", true); // traffic is proxied through ingress-nginx
@@ -16,7 +17,9 @@ app.use(
   cookieSession({ signed: false, secure: process.env.NODE_ENV !== "test" })
 );
 app.use(currentUser);
+
 app.use(createChargeRouter);
+app.use(stripeWebhookRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();

@@ -8,21 +8,22 @@ import { useCallback, useRef, useState } from "react";
 import useRequest from "@/hooks/useRequest";
 import { Order } from "@/types/order";
 
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 export default function EmbeddedCheckoutButton({ order }: { order: Order }) {
-  const stripePromise = loadStripe(
-    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-  );
   const [showCheckout, setShowCheckout] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
   const { sendRequest } = useRequest();
-  const fetchClientSecret = useCallback(() => {
+  const fetchClientSecret = useCallback(async () => {
     // Create a Checkout Session
-    return sendRequest({
+    const data = await sendRequest({
       url: "/api/payments",
-      method: "POST",
-      body: JSON.stringify({ orderId: order.id }),
-    })
-      .then((data) => data.clientSecret);
+      method: "post",
+      body: { orderId: order.id, name: order.vinyl.title },
+    });
+    console.log(data);
+    return data.client_secret;
   }, []);
 
   const options = { fetchClientSecret };

@@ -18,10 +18,10 @@ const router = express.Router();
 router.post(
   "/api/payments",
   requireAuth,
-  [body("token").not().isEmpty(), body("orderId").not().isEmpty()],
+  [body("orderId").not().isEmpty()],
   async (req: Request, res: Response) => {
-    const { token, orderId } = req.body;
-    const order = await Order.findById(orderId).populate("vinyl");
+    const { orderId, name } = req.body;
+    const order = await Order.findById(orderId);
     if (!order) {
       throw new NotFoundError();
     }
@@ -31,44 +31,29 @@ router.post(
     if (order.status === OrderStatus.Cancelled) {
       throw new BadRequestError("Order is cancelled");
     }
-
-    // const paymentData = await stripe.charges.create({
-    //   currency: "usd",
-    //   amount: order.price * 100,
-    //   source: token,
-    // });
+    const price = await stripe.prices.create({
+      currency: "usd",
+      unit_amount: order.price * 100,
+      product_data: {
+        name,
+      },
+    });
     const paymentData = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
       payment_method_types: ["card"],
       line_items: [
         {
-          price_data: {
-            currency: "usd",
-            unit_amount: order.price * 100,
-          },
+          price: price.id,
           quantity: 1,
         },
       ],
       mode: "payment",
-      return_url: `${req.headers.origin}/return?session_id={CHECKOUT_SESSION_ID}`,
+      metadata: {
+        orderId: order.id,
+      },
+      return_url: `${req.headers.origin}/orders?session_id={CHECKOUT_SESSION_ID}`,
     });
-
-    const payment = Payment.build({
-      orderId,
-      stripeId: paymentData.id,
-    });
-    await payment.save();
-
-    const producer = new PaymentCreatedProducer(kafkaWrapper.client);
-    await producer.produce({
-      id: payment.id,
-      orderId: payment.orderId,
-      stripeId: payment.stripeId,
-    });
-
-    res
-      .status(201)
-      .send({ id: payment.stripeId, client_secret: paymentData.client_secret });
+    res.status(200).send({ client_secret: paymentData.client_secret });
   }
 );
 

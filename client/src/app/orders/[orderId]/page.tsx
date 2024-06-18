@@ -9,8 +9,7 @@ export default async function Order({
   params: { orderId: string };
 }) {
   const { orderId } = params;
-  // const order: OrderType = await getOrderById(orderId);
-  const order = orders.find((order) => order.id === orderId);
+  const order: OrderType = await getOrderById(orderId);
   return (
     <div className="h-screen bg-neutral-800">
       <NewOrder order={order!} />

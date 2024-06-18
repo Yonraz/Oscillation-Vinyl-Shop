@@ -3,11 +3,11 @@ import { Order } from "@/types/order";
 
 const orderStatusToColor = (status: string) => {
   switch (status) {
-    case "AwaitingPayment":
+    case "awaitingPayment":
       return "bg-yellow-100";
-    case "Complete":
+    case "complete":
       return "bg-green-100";
-    case "Cancelled":
+    case "cancelled":
       return "bg-red-100";
     default:
       return "bg-yellow-100";
