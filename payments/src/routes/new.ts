@@ -20,7 +20,7 @@ router.post(
   requireAuth,
   [body("orderId").not().isEmpty()],
   async (req: Request, res: Response) => {
-    const { orderId, name } = req.body;
+    const { orderId, sessionId } = req.body;
     const order = await Order.findById(orderId);
     if (!order) {
       throw new NotFoundError();
@@ -31,29 +31,19 @@ router.post(
     if (order.status === OrderStatus.Cancelled) {
       throw new BadRequestError("Order is cancelled");
     }
-    const price = await stripe.prices.create({
-      currency: "usd",
-      unit_amount: order.price * 100,
-      product_data: {
-        name,
-      },
+    const payment = Payment.build({
+      orderId,
+      stripeId: sessionId,
     });
-    const paymentData = await stripe.checkout.sessions.create({
-      ui_mode: "embedded",
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price: price.id,
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
-      metadata: {
-        orderId: order.id,
-      },
-      return_url: `${req.headers.origin}/orders?session_id={CHECKOUT_SESSION_ID}`,
+    await payment.save();
+
+    const producer = new PaymentCreatedProducer(kafkaWrapper.client);
+    await producer.produce({
+      id: payment.id,
+      orderId: payment.orderId,
+      stripeId: payment.stripeId,
     });
-    res.status(200).send({ client_secret: paymentData.client_secret });
+    res.status(200).send({ success: true });
   }
 );
 

@@ -19,20 +19,6 @@ export default function NewOrder(props: { order: Order }) {
   const [seconds, setSeconds] = useState(Math.round(msLeft / 1000));
 
   const { sendRequest, isLoading, requestErrors } = useRequest();
-  function handleToken(token: any) {
-    sendRequest({
-      url: "/api/payments",
-      method: "post",
-      body: {
-        token,
-        orderId: props.order.id,
-      },
-      onSuccess: (payment) => {
-        console.log(payment);
-        router.push("/vinyls");
-      },
-    });
-  }
 
   useEffect(() => {
     const getTimeLeft = () => {
@@ -78,14 +64,6 @@ export default function NewOrder(props: { order: Order }) {
           <OrderDetails order={order} />
           <Seperator />
           <div className="mt-4">
-            {/* <StripeCheckout
-              amount={order.vinyl.price * 100}
-              token={({ id }) => {
-                handleToken(id);
-              }}
-              email={currentUser!.email!}
-              stripeKey={stripePublishableKey}
-            /> */}
             <EmbeddedCheckoutButton order={order} />
           </div>
           {requestErrors && <ErrorList errors={requestErrors} />}

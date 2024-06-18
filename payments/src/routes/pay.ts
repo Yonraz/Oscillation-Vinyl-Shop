@@ -27,18 +27,7 @@ router.post(
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
       const orderId = session.metadata!.orderId;
-      const payment = Payment.build({
-        orderId,
-        stripeId: session.id,
-      });
-      await payment.save();
-
-      const producer = new PaymentCreatedProducer(kafkaWrapper.client);
-      await producer.produce({
-        id: payment.id,
-        orderId: payment.orderId,
-        stripeId: payment.stripeId,
-      });
+      
       console.log(`Session ${session.id} was successful!`);
     }
 

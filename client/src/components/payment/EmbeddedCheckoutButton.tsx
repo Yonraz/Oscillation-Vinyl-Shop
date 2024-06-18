@@ -17,13 +17,19 @@ export default function EmbeddedCheckoutButton({ order }: { order: Order }) {
   const { sendRequest } = useRequest();
   const fetchClientSecret = useCallback(async () => {
     // Create a Checkout Session
-    const data = await sendRequest({
-      url: "/api/payments",
-      method: "post",
-      body: { orderId: order.id, name: order.vinyl.title },
-    });
-    console.log(data);
-    return data.client_secret;
+    return fetch("/api/embedded-checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        orderId: order.id,
+        orderPrice: order.vinyl.title,
+        name: order.vinyl.price,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => data.client_secret);
   }, []);
 
   const options = { fetchClientSecret };
@@ -51,6 +57,7 @@ export default function EmbeddedCheckoutButton({ order }: { order: Order }) {
               <EmbeddedCheckoutProvider
                 stripe={stripePromise}
                 options={options}
+                
               >
                 <EmbeddedCheckout />
               </EmbeddedCheckoutProvider>
