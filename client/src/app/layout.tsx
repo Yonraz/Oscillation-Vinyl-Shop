@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Jost } from "next/font/google";
 import "../globals.css";
 import Header from "@/components/header/Header";
 import { UserProvider } from "@/context/user-context";
@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/api/get-current-user";
 import { CurrentUser } from "@/types/currentUser";
 
 const inter = Inter({ subsets: ["latin"] });
+const jost = Jost({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Oscillation Vinyl Records",
@@ -26,7 +27,7 @@ const AsyncLayout: React.FC<{
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={jost.className}>
         <UserProvider initialUser={currentUser.currentUser}>
           <Header />
           {children}

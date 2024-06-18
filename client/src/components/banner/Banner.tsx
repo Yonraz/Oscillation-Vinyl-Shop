@@ -35,9 +35,6 @@ export default function Banner() {
           </h1>
           <p className="text-lg">The best place to buy records online</p>
         </div>
-        <div className="absolute top-3/4 text-center w-full">
-          <h1 className="z-10  text-3xl font-extrabold">Explore Genres!</h1>
-        </div>
       </div>
     </>
   );
