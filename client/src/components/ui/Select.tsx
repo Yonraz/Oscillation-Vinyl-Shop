@@ -18,8 +18,14 @@ export default function Select({
 }: SelectProps) {
   return (
     <div>
-      <label className="text-gray-700 text-sm font-bold mr-2">{label}</label>
-      <select {...register(name, validation)} {...inputProps}>
+      <label className="text-gray-700 text-sm bg-white font-bold mr-2">
+        {label}
+      </label>
+      <select
+        className="bg-white"
+        {...register(name, validation)}
+        {...inputProps}
+      >
         {children}
       </select>
     </div>

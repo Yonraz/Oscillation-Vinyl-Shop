@@ -21,3 +21,9 @@ export const buildClient = async (): Promise<AxiosInstance | null> => {
     return null;
   }
 };
+
+export const getBaseUrl = () => {
+  return typeof window === "undefined"
+    ? "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local"
+    : "";
+};

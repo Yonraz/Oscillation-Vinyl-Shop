@@ -99,7 +99,7 @@ const NewVinylForm = () => {
   return (
     <div className="flex justify-center items-start w-full min-h-screen overflow-hidden bg-neutral-800">
       {(isSubmitting || isLoading) && <LoadingSpinner />}
-      <div className="max-w-lg max-h-lg mt-8">
+      <div className="xs:w-5/6 w-1/2 max-h-lg mt-8">
         <form
           className="bg-white shadow-md rounded-lg px-8 pt-6 pb-10 mb-4 "
           onSubmit={handleSubmit(onSubmit)}
@@ -119,7 +119,7 @@ const NewVinylForm = () => {
               </p>
             )}
           </div>
-          <div>
+          <div className="mb-4">
             <FormInput
               register={register}
               validation={formSchema.shape.price}
@@ -142,9 +142,11 @@ const NewVinylForm = () => {
               validation={{ required: true }}
               label="Genre"
             >
-              <option value="">Select a genre</option>
+              <option className="bg-white" value="">
+                Select a genre
+              </option>
               {Object.keys(Genre).map((key) => (
-                <option key={key} value={key}>
+                <option className="bg-white" key={key} value={key}>
                   {/* @ts-ignore */}
                   {Genre[key]}
                 </option>
@@ -162,7 +164,7 @@ const NewVinylForm = () => {
             </label>
             <textarea
               maxLength={250}
-              className="border-2 rounded-md"
+              className="border-2 bg-white rounded-md"
               {...register("description", { required: true })}
             ></textarea>
             {errors.description && (

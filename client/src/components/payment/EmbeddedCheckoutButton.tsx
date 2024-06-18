@@ -7,6 +7,8 @@ import {
 import { useCallback, useRef, useState } from "react";
 import useRequest from "@/hooks/useRequest";
 import { Order } from "@/types/order";
+import { get } from "http";
+import { getBaseUrl } from "@/api/build-client";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -17,15 +19,20 @@ export default function EmbeddedCheckoutButton({ order }: { order: Order }) {
   const { sendRequest } = useRequest();
   const fetchClientSecret = useCallback(async () => {
     // Create a Checkout Session
-    return sendRequest({
-      url: "/api/embedded-checkout",
+    const response = await fetch(`/api/embedded-checkout`, {
       method: "POST",
-      body: {
-        orderId: order.id,
-        orderPrice: order.vinyl.title,
-        name: order.vinyl.price,
+      headers: {
+        "Content-Type": "application/json",
       },
-    }).then((data) => data.client_secret);
+      body: JSON.stringify({
+        orderId: order.id,
+        orderPrice: order.vinyl.price,
+        name: order.vinyl.title,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data.client_secret;
   }, []);
 
   const options = { fetchClientSecret };

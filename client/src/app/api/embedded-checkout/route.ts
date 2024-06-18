@@ -1,10 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/utils/stripe";
 import { NextApiRequest } from "next";
 
-export async function POST(request: NextApiRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const { orderId, orderPrice, name } = request.body;
+    console.log(request.body);
+    const { orderId, orderPrice, name } = await request.json();
 
     const price = await stripe.prices.create({
       currency: "usd",
@@ -26,8 +27,9 @@ export async function POST(request: NextApiRequest) {
         orderId,
       },
       mode: "payment",
-      return_url: `${request.headers.origin}/orders?session_id={CHECKOUT_SESSION_ID}`,
-      success_url: `${request.headers.origin}/orders/complete?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${request.headers.get(
+        "origin"
+      )}/orders/complete?session_id={CHECKOUT_SESSION_ID}`,
     });
 
     return NextResponse.json({

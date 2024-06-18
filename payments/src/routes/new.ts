@@ -18,7 +18,7 @@ const router = express.Router();
 router.post(
   "/api/payments",
   requireAuth,
-  [body("orderId").not().isEmpty()],
+  [body("orderId").not().isEmpty(), body("sessionId").not().isEmpty()],
   async (req: Request, res: Response) => {
     const { orderId, sessionId } = req.body;
     const order = await Order.findById(orderId);

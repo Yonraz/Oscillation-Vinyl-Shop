@@ -14,7 +14,7 @@ const Vinyls = async ({
 }) => {
   let { genre } = searchParams;
   const vinyls: Vinyl[] = await getVinyls();
-  console.log(vinyls)
+  
   let vinylsToShow: Vinyl[] = vinyls;
   if (genre && genre in Genre) {
     vinylsToShow = vinyls.filter((vinyl) => vinyl.genre === genre);
