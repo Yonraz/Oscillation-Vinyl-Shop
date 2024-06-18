@@ -13,7 +13,7 @@ Oscillation Vinyls is a comprehensive full-stack web application designed for th
 * **Containerization:** Docker, Kubernetes
 * **Event Handling and Microservice Communication:** Apache Kafka
 * **Styling:** TailwindCSS
-* **Testing:** Jest
+* **Unit Testing:** Jest
 
 ## Features
 
