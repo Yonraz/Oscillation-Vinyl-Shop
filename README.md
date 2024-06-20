@@ -1,4 +1,5 @@
 # Oscillation Vinyls
+![Screenshot 2024-06-20 143239](https://github.com/Yonraz/Oscillation-Vinyl-Shop/assets/99009434/b07c3e3c-3e6a-45c4-bcde-2b66ad8693c6)
 
 ## Description
 
@@ -19,20 +20,28 @@ Oscillation Vinyls is a comprehensive full-stack web application designed for th
 
 * **Authentication and Authorization**
     - JSON Web Tokens (JWT) for authentication
-    - Sign-in, sign-up, and sign-out pages interact with the authentication service
+    - Sign-in, sign-up, and sign-out pages interact with the authentication service - auth flow details below
 
 * **Vinyl Records Management**
     - View available records
     - Authenticated users can add and update their own records
     - Image uploads stored in an AWS S3 bucket
 
+<img src="https://github.com/Yonraz/Oscillation-Vinyl-Shop/assets/99009434/2991640c-5fcc-4e6a-877c-64e44caf25c8" width=50% height=50% />
+
+
 * **Orders Management**
     - 15-minute reservation window for order placement
     - View order statuses
 
+<img src="https://github.com/Yonraz/Oscillation-Vinyl-Shop/assets/99009434/27f5984b-6a45-447c-8162-040a2c76a3e5" width=25% height=25% />
+
+
 * **Payments**
     - Integrated with Stripe Embedded Checkout for payment processing
     - Payment functionality is for demonstration purposes only
+ 
+  <img src="https://github.com/Yonraz/Oscillation-Vinyl-Shop/assets/99009434/584db9a9-548d-484b-8a1a-1dc9520c2403" width=25% height=25% />
 
 ## Frontend
 
