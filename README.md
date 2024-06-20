@@ -43,6 +43,14 @@ Oscillation Vinyls is a comprehensive full-stack web application designed for th
  
   <img src="https://github.com/Yonraz/Oscillation-Vinyl-Shop/assets/99009434/584db9a9-548d-484b-8a1a-1dc9520c2403" width=25% height=25% />
 
+
+Disclaimer: This app is not deployed, and setting it up on your own machine will require a bit of work including setting up kubernetes, kubectl context env variables, Next env variables and other painful stuff. so here's a quick preview of the app: 
+
+https://github.com/Yonraz/Oscillation-Vinyl-Shop/assets/99009434/2610316c-3307-4cf4-915a-233caf438752
+
+
+
+
 ## Frontend
 
 ### Main Routes
